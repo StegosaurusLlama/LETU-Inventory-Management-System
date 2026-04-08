@@ -1,0 +1,52 @@
+DROP TABLE IF EXISTS InventoryChange;
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS ProductTag;
+DROP TABLE IF EXISTS Tag;
+DROP TABLE IF EXISTS StockItem;
+
+CREATE TABLE Users (
+  userID int AUTO_INCREMENT PRIMARY KEY NOT NULL, 
+  username varChar(20) NOT NULL UNIQUE, 
+  passwordHash varChar(128) NOT NULL,
+  clearance int NOT NULL
+);
+
+CREATE TABLE InventoryChange (
+  changeID int AUTO_INCREMENT PRIMARY KEY NOT NULL, 
+  changeTime datetime NOT NULL, 
+  userID int NOT NULL,
+  actionTaken varchar(255) NOT NULL,
+  effectiveChange varchar(255) NOT NULL,
+  changeQuantity int NOT NULL,
+  CONSTRAINT fk_Users 
+    FOREIGN KEY (userID)
+    REFERENCES Users(userID)
+);
+
+CREATE TABLE Tag (
+  tagID int AUTO_INCREMENT PRIMARY KEY NOT NULL, 
+  name varChar(20) NOT NULL UNIQUE
+);
+
+CREATE TABLE StockItem (
+  productID int AUTO_INCREMENT PRIMARY KEY NOT NULL, 
+  name varChar(60) NOT NULL UNIQUE, 
+  price decimal(10,2) NOT NULL,
+  quantity int NOT NULL,
+  description varChar(200) NOT NULL,
+  lowThreshhold int NOT NULL
+);
+
+CREATE TABLE ProductTag (
+  productID int NOT NULL,
+  tagID int NOT NULL,
+  CONSTRAINT fk_StockItem
+    FOREIGN KEY (productID)
+    REFERENCES StockItem(productID),
+  CONSTRAINT fk_Tag
+    FOREIGN KEY (tagID)
+    REFERENCES Tag(tagID),
+  PRIMARY KEY (productID, tagID)
+);
+
+
