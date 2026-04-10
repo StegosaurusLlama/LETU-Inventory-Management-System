@@ -24,5 +24,9 @@ def login_attempt():
 	else:
 		return redirect(url_for("login"))
 
+@app.route("/inventory")
+def inventory():
+	pass
+
 def getDatabase():
 	pass
