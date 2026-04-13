@@ -1,0 +1,19 @@
+/* search-block */
+.search-bar{padding: 10px; text-align: center;}
+
+.search-bar input{width: 80%; padding: 5px; border-radius: 20px; border: 1px solid #aa1616;}
+
+/* inventort list */
+.item-card { display: flex; padding: 20px; border-top: 1px solid #eee; position: relative; }
+        .item-image { width: 120px; height: 120px; background: #ddd; margin-right: 20px; flex-shrink: 0; }
+        .item-info { flex-grow: 1; }
+        .item-info h2 { margin: 0 0 10px; font-size: 24px; }
+        .item-info p { margin: 5px 0; color: #333; font-size: 14px; }
+
+        .tag-list { margin-top: 10px; display: flex; gap: 10px; }
+        .tag { border: 1px solid #999; padding: 2px 10px; border-radius: 15px; font-size: 12px; display: flex; align-items: center; }
+        .tag span { margin-right: 8px; cursor: pointer; font-weight: bold; }
+
+/* edit button */
+    .edit-btn { cursor: pointer; font-size: 24px; color: #666; position: absolute; right: 200px; top: 20px; }
+    .note { position: absolute; right: 20px; top: 20px; width: 150px; font-size: 11px; color: #4a90e2; }
