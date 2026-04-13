@@ -21,12 +21,15 @@ def login_attempt():
 	print(name)
 	if name == "admin":
 		return "<h1>Hello Admin</h1>"
+	elif name == "inventory":
+		return redirect(url_for("inventory"))
 	else:
 		return redirect(url_for("login"))
 
 @app.route("/inventory")
 def inventory():
-	pass
+	# connect to database, update html
+	return render_template("inventory page.html")
 
 def getDatabase():
 	pass
