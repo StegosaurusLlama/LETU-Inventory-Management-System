@@ -1,7 +1,8 @@
 from flask import *
+from dbAccess import dbAccess
 
 app = Flask(__name__)
-
+db = dbAccess()
 @app.route("/")
 def hello_world():
 	return "<a href='/login'><p>Hello, World!</p></a>"
@@ -20,6 +21,7 @@ def login_attempt():
 	name = request.form.get("username")
 	print(name)
 	if name == "admin":
+		db.add_item()
 		return "<h1>Hello Admin</h1>"
 	elif name == "inventory":
 		return redirect(url_for("inventory"))
