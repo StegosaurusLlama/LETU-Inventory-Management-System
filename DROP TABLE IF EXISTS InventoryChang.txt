@@ -5,48 +5,48 @@ DROP TABLE IF EXISTS Tag;
 DROP TABLE IF EXISTS StockItem;
 
 CREATE TABLE Users (
-  userID int AUTO_INCREMENT PRIMARY KEY NOT NULL, 
-  username varChar(20) NOT NULL UNIQUE, 
-  passwordHash varChar(128) NOT NULL,
-  clearance int NOT NULL
+  userID INTEGER PRIMARY KEY AUTOINCREMENT, 
+  username TEXT NOT NULL UNIQUE, 
+  passwordHash TEXT NOT NULL,
+  clearance INTEGER NOT NULL
 );
 
 CREATE TABLE InventoryChange (
-  changeID int AUTO_INCREMENT PRIMARY KEY NOT NULL, 
-  changeTime datetime NOT NULL, 
-  userID int NOT NULL,
-  actionTaken varchar(255) NOT NULL,
-  effectiveChange varchar(255) NOT NULL,
-  changeQuantity int NOT NULL,
-  CONSTRAINT fk_Users 
-    FOREIGN KEY (userID)
-    REFERENCES Users(userID)
+  changeID INTEGER PRIMARY KEY AUTOINCREMENT, 
+  changeTime TEXT NOT NULL DEFAULT (datetime('now')), 
+  userID INTEGER NOT NULL,
+  actionTaken TEXT NOT NULL,
+  effectiveChange TEXT NOT NULL,
+  changeQuantity INTEGER NOT NULL,
+  FOREIGN KEY (userID) REFERENCES Users(userID)
 );
 
 CREATE TABLE Tag (
-  tagID int AUTO_INCREMENT PRIMARY KEY NOT NULL, 
-  name varChar(20) NOT NULL UNIQUE
+  tagID INTEGER PRIMARY KEY AUTOINCREMENT, 
+  name TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE StockItem (
-  productID int AUTO_INCREMENT PRIMARY KEY NOT NULL, 
-  name varChar(60) NOT NULL UNIQUE, 
-  price decimal(10,2) NOT NULL,
-  quantity int NOT NULL,
-  description varChar(200) NOT NULL,
-  lowThreshhold int NOT NULL
+  productID INTEGER PRIMARY KEY AUTOINCREMENT, 
+  name TEXT NOT NULL UNIQUE, 
+  price REAL NOT NULL,
+  quantity INTEGER NOT NULL,
+  description TEXT NOT NULL,
+  lowThreshhold INTEGER NOT NULL
 );
 
 CREATE TABLE ProductTag (
-  productID int NOT NULL,
-  tagID int NOT NULL,
-  CONSTRAINT fk_StockItem
-    FOREIGN KEY (productID)
-    REFERENCES StockItem(productID),
-  CONSTRAINT fk_Tag
-    FOREIGN KEY (tagID)
-    REFERENCES Tag(tagID),
+  productID INTEGER NOT NULL,
+  tagID INTEGER NOT NULL,
+  FOREIGN KEY (productID) REFERENCES StockItem(productID) ON DELETE CASCADE,
+  FOREIGN KEY (tagID) REFERENCES Tag(tagID) ON DELETE CASCADE,
   PRIMARY KEY (productID, tagID)
 );
+
+CREATE TRIGGER no_log_delete
+BEFORE DELETE ON InventoryChange
+BEGIN
+    SELECT RAISE(ABORT, 'Deletes not allowed on InventoryChange');
+END;
 
 

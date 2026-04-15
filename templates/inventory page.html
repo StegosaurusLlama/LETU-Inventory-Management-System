@@ -16,20 +16,22 @@
     <div class="search-bar">
         <input type="text" placeholder="Search...">
     </div>
-    <div class="item-card">
-        <div class="item-image"></div>
-        <div class="item-info">
-            <h2 id="name-1">ITEM NAME</h2>
-            <p>Item #: 001</p>
-            <p>Price: $99.00</p>
-            <p id="desc-1">Description: stuff and things about the item goes here - 240 character max</p>
-            <div class="tag-list">
-                <div class="tag"><span>X</span> tag</div>
+    {% for item in items %}
+        <div class="item-card">
+            <div class="item-image"></div>
+            <div class="item-info">
+                <h2 id="name-1">{{item.name}}</h2>
+                <p>Item #: {{item.num}}</p>
+                <p>Price: {{item.price}}</p>
+                <p id="desc-1">Description: {{item.desc}}</p>
+                <div class="tag-list">
+                    <div class="tag"><span>X</span> tag</div>
+                </div>
             </div>
+            <div class="edit-btn" onclick="editItem(1)">✎</div>
+            <div class="note">Note: Only roles that can edit items and such see this button</div>
         </div>
-        <div class="edit-btn" onclick="editItem(1)">✎</div>
-        <div class="note">Note: Only roles that can edit items and such see this button</div>
-    </div>
+    {% endfor %}
 </div>
 <script>
     function editItem(id) {

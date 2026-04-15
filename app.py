@@ -31,7 +31,9 @@ def login_attempt():
 @app.route("/inventory")
 def inventory():
 	# connect to database, update html
-	return render_template("inventory page.html")
+	items = db.get_items()
+	print(items)
+	return render_template("inventory page.html", items=items)
 
 def getDatabase():
 	pass
