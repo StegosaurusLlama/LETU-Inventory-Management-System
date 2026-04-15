@@ -4,8 +4,8 @@ from dbAccess import dbAccess
 app = Flask(__name__)
 db = dbAccess()
 @app.route("/")
-def hello_world():
-	return "<a href='/login'><p>Hello, World!</p></a>"
+def default():
+	return redirect(url_for("inventory"))
 	
 @app.route("/test")
 def test():
@@ -14,10 +14,10 @@ def test():
 @app.route("/login")
 def login():
 	username = "testing"
-	return render_template("log_in.html", name=username)
+	return render_template("log-in.html", name=username)
 
 @app.route("/login-submit", methods=["POST"])
-def login_attempt():
+def loginAttempt():
 	name = request.form.get("username")
 	print(name)
 	if name == "admin":
@@ -32,8 +32,24 @@ def login_attempt():
 def inventory():
 	# connect to database, update html
 	items = db.get_items()
-	print(items)
-	return render_template("inventory page.html", items=items)
+	return render_template("inventory-page.html", items=items)
 
-def getDatabase():
-	pass
+@app.route("/submit-item", methods=["POST"])
+def submit():
+	name = request.form.get("name")
+	price = request.form.get("price")
+	amount = request.form.get("amount")
+	desc = request.form.get("desc")
+	lowCount = request.form.get("lowCount")
+	imageFile = request.files['imageFile']
+	imagePath = "images/" + imageFile.filename
+	imageFile.save(imagePath)
+	db.add_item(name, price, amount, desc, lowCount, imagePath)
+	return redirect(url_for("inventory"))
+
+@app.route("/images/<filename>")
+def images(filename):
+	return send_from_directory('images', filename)
+
+if __name__ == "__main__":
+    app.run(debug=True)

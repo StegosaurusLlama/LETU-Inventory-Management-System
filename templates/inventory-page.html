@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory list</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='head-style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='inventory-list.css') }}">
+</head>
+<body>
+    <header class="tab-container">
+        <a href="" class="nav-btn">inventory</a>
+        <a href="" class="nav-btn">Audit Log</a>
+        <a href="" class="nav-btn">User Account</a>
+    </header>
+    <div class="search-bar">
+        <input type="text" placeholder="Search...">
+    </div>
+
+    <div>
+        <button onclick="openAddItem()">Add Item</button>
+    </div>
+
+    <div id="add-item" class="add-item">
+        <div class="add-item-content">
+            <p>Add Item</p>
+            <form action="/submit-item" method="POST" enctype="multipart/form-data">
+                <input type="text" placeholder="Product Name" name="name">
+                <br>
+                <input type="number" step="0.01" min="0" placeholder="Enter Price" name="price">
+                <br>
+                <input type="number" min="0" placeholder="Enter Initial Stock" name="amount">
+                <br>
+                <textarea placeholder="Enter Description" name="desc"></textarea>
+                <br>
+                <input type="number" min="0" placeholder="Enter Low Threshhold" name="lowCount">
+                <br>
+                <input type="file" accept="image/*" name="imageFile">
+                <br>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+
+    {% for item in items %}
+        <div class="item-card">
+            <img src="{{item.imgurl}}" alt="No Image Found" class="item-image">
+            <div class="item-info">
+                <h2 id="name-{{item.id}}">{{item.name}}</h2>
+                <p>Item #: {{item.id}}</p>
+                <p>Price: ${{item.price}}</p>
+                <p id="desc-{{item.id}}">Description: {{item.desc}}</p>
+                <div class="tag-list">
+                    <div class="tag"><span>X</span> tag</div>
+                </div>
+            </div>
+            <div class="edit-btn" onclick="editItem({{item.id}})">✎</div>
+            <div class="note">Note: Only roles that can edit items and such see this button</div>
+        </div>
+    {% endfor %}
+<script src="{{ url_for('static', filename='inventory-script.js') }}"></script>
+
+</body>
+</html>

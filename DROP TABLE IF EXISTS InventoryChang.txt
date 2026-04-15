@@ -32,7 +32,8 @@ CREATE TABLE StockItem (
   price REAL NOT NULL,
   quantity INTEGER NOT NULL,
   description TEXT NOT NULL,
-  lowThreshhold INTEGER NOT NULL
+  lowThreshhold INTEGER NOT NULL,
+  image TEXT
 );
 
 CREATE TABLE ProductTag (
