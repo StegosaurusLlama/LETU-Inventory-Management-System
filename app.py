@@ -27,15 +27,21 @@ def login_attempt():
 	username = request.form.get("username")
 	password = request.form.get("password")
 	user = db.get_user_info(username)
-	if user[2] and check_password_hash(user[2], password): #successful login
+	print(user)
+	if user and check_password_hash(user[2], password): #successful login
 		session['user'] = user[0] #user ID
 		session['clearance'] = user[3]
 		return redirect(url_for("inventory"))
 	else: #failed login
 		return redirect(url_for("login"))
 
-@app.route("/create-user-submit", methods=["POST"])
+@app.route("/create-user")
 def create_user():
+	return render_template("user-create.html")
+
+
+@app.route("/create-user-submit", methods=["POST"])
+def create_user_submit():
 	username = request.form.get("username")
 	password = request.form.get("password")
 	clearance = request.form.get("clearance")

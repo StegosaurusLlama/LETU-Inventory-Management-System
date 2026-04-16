@@ -40,7 +40,7 @@ class db_access:
     def get_user_info(self, username):
         conn = self.connect()
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM users WHERE users.username = (?)", (username))
-        user = cursor.fetchall()
+        cursor.execute("SELECT * FROM users WHERE username = (?)", (username,))
+        user = cursor.fetchall()[0]
         conn.close()
         return user
