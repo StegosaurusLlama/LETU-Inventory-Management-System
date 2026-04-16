@@ -2,16 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>log in</title>
-</head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Log in</title>
+    <link href="https://cdn.jsdelivr.net.cn/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  </head>
 <body>
-    <form action="/login-submit" method="POST">
-        <h3 style="margin-top:0">log in</h3>
-        <input type="text" name = "username" placeholder={{name}}>
-        <br>
-        <input type="password" placeholder="password"><br>
-        <button type="submit">submit</button>
-    </form>
+    <div class="container mt-5" style="max-width: 400px;">
+        <form action="/login-submit" method="POST">
+            <h3 style="margin-top:0">Log in Inventory system</h3><br><br>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
+            </div>
+
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="Recipient’s username" aria-label="Recipient’s username" aria-describedby="basic-addon2">
+            </div>
+            
+            <div class="d-grid justify-content-center">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>            
+        </form>
+    </div>
+    <script src="https://cdn.jsdelivr.net.cn/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
 </body>
 </html>
