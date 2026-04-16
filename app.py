@@ -1,8 +1,14 @@
 from flask import *
-from dbAccess import dbAccess
+from db_access import db_access
+import secrets
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
-db = dbAccess()
+
+db = db_access()
+
+app.secret_key = secrets.token_hex(16)
+
 @app.route("/")
 def default():
 	return redirect(url_for("inventory"))
@@ -17,16 +23,25 @@ def login():
 	return render_template("log-in.html", name=username)
 
 @app.route("/login-submit", methods=["POST"])
-def loginAttempt():
-	name = request.form.get("username")
-	print(name)
-	if name == "admin":
-		db.add_item()
-		return "<h1>Hello Admin</h1>"
-	elif name == "inventory":
+def login_attempt():
+	username = request.form.get("username")
+	password = request.form.get("password")
+	user = db.get_user_info(username)
+	if user[2] and check_password_hash(user[2], password): #successful login
+		session['user'] = user[0] #user ID
+		session['clearance'] = user[3]
 		return redirect(url_for("inventory"))
-	else:
+	else: #failed login
 		return redirect(url_for("login"))
+
+@app.route("/create-user-submit", methods=["POST"])
+def create_user():
+	username = request.form.get("username")
+	password = request.form.get("password")
+	clearance = request.form.get("clearance")
+	hashed_pass = generate_password_hash(password)
+	db.add_user(username, hashed_pass, clearance)
+	return redirect(url_for("create_user"))
 
 @app.route("/inventory")
 def inventory():
