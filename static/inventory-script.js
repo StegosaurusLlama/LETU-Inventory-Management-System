@@ -18,9 +18,22 @@ function closeAddItem() {
     document.getElementById("add-item").style.display = "none";
 }
 
+function openAddTag() {
+    document.getElementById("add-tag").style.display = "block";
+    console.log("here")
+}
+
+function closeAddTag() {
+    document.getElementById("add-tag").style.display = "none";
+}
+
 window.onclick = function(event) {
     const addItem = this.document.getElementById("add-item")
+    const addTag = this.document.getElementById("add-tag")
     if (event.target === addItem) {
         addItem.style.display = "none";
+    }
+    else if (event.target === addTag) {
+        addTag.style.display = "none";
     }
 }

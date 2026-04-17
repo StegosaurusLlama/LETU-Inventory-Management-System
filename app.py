@@ -30,9 +30,9 @@ def login_attempt():
 	if not users: #failed login
 		return redirect(url_for("login"))
 	user = users[0]
-	if check_password_hash(user[2], password): #successful login
-		session['user'] = user[0] #user ID
-		session['clearance'] = user[3]
+	if check_password_hash(user["passwordHash"], password): #successful login
+		session["user"] = user["userID"] #user ID
+		session["clearance"] = user["clearance"]
 		return redirect(url_for("inventory"))
 	else: #failed login
 		return redirect(url_for("login"))
@@ -54,11 +54,13 @@ def create_user_submit():
 @app.route("/inventory")
 def inventory():
 	# connect to database, update html
-	items = db.get_items()
-	return render_template("inventory-page.html", items=items)
+	rows = db.get_items()
+	for r in rows:
+		r["tags"] = db.get_tags(r["productID"])
+	return render_template("inventory-page.html", items=rows)
 
 @app.route("/submit-item", methods=["POST"])
-def submit():
+def submit_item():
 	name = request.form.get("name")
 	price = request.form.get("price")
 	amount = request.form.get("amount")
@@ -68,6 +70,15 @@ def submit():
 	imagePath = "images/" + imageFile.filename
 	imageFile.save(imagePath)
 	db.add_item(name, price, amount, desc, lowCount, imagePath)
+	return redirect(url_for("inventory"))
+
+@app.route("/submit-tag", methods=["POST"])
+def submit_tag():
+	name = request.form.get("name")
+	db.make_tag(name)
+	productID = request.form.get("productID")
+	row = db._get_data("SELECT tagID FROM Tag WHERE name = ?", (name,))[0]
+	db.apply_tag(productID, row["tagID"])
 	return redirect(url_for("inventory"))
 
 @app.route("/images/<filename>")

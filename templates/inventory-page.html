@@ -51,19 +51,39 @@
 
     {% for item in items %}
         <div class="item-card">
-            <img src="{{item.imgurl}}" alt="No Image Found" class="item-image">
+            <img src="{{item.image}}" alt="No Image Found" class="item-image">
             <div class="item-info">
-                <h2 id="name-{{item.id}}">{{item.name}}</h2>
-                <p>Item #: {{item.id}}</p>
+                <h2 id="name-{{item.productID}}">{{item.name}}</h2>
+                <p>Item #: {{item.productID}}</p>
                 <p>Price: ${{item.price}}</p>
-                <p id="desc-{{item.id}}">Description: {{item.desc}}</p>
+                <p id="desc-{{item.id}}">Description: {{item.description}}</p>
                 <div class="tag-list">
-                    <div class="tag"><span>X</span> tag</div>
+                    {% for tag in item.tags %}
+                        <div class="tag"><span>X</span>{{tag.name}}</div>
+                    {% endfor %}
                 </div>
             </div>
             {% if session['clearance'] == 3 %}
                 <div class="edit-btn" onclick="editItem({{item.id}})">✎</div>
                 <div class="note">Note: Only roles that can edit items and such see this button</div>
+            {% endif %}
+            {% if session['clearance'] == 3 %}
+                <br>    
+                <div>
+                    <button onclick="openAddTag()" class="add-tag-btn">Add Tag</button>
+                </div>
+
+                <div id="add-tag" class="add-tag">
+                    <div class="add-tag-content">
+                        <p>Add Item</p> 
+                        <form action="/submit-tag" method="POST">
+                            <input type="hidden" value="{{item.productID}}" name = productID>
+                            <input type="text" placeholder="Name" name="name">
+                            <br>
+                            <input type="submit" value="Submit">
+                        </form>
+                    </div>
+                </div>
             {% endif %}
         </div>
     {% endfor %}
