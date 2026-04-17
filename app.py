@@ -26,9 +26,11 @@ def login():
 def login_attempt():
 	username = request.form.get("username")
 	password = request.form.get("password")
-	user = db.get_user_info(username)
-	print(user)
-	if user and check_password_hash(user[2], password): #successful login
+	users = db.get_user_info(username)
+	if not users: #failed login
+		return redirect(url_for("login"))
+	user = users[0]
+	if check_password_hash(user[2], password): #successful login
 		session['user'] = user[0] #user ID
 		session['clearance'] = user[3]
 		return redirect(url_for("inventory"))

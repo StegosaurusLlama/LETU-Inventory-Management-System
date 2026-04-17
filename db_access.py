@@ -13,9 +13,11 @@ class db_access:
     def add_item(self, name, price, amount, desc, lowCount, imgurl):
         conn = self.connect()
         cursor = conn.cursor()
-        print("INSERTING")
-        cursor.execute("INSERT INTO stockitem (name, price, quantity, description, lowthreshhold, image) VALUES (?,?,?,?,?,?)", (name, price, amount, desc, lowCount, imgurl))
-        conn.commit()
+        try:
+            cursor.execute("INSERT INTO stockitem (name, price, quantity, description, lowthreshhold, image) VALUES (?,?,?,?,?,?)", (name, price, amount, desc, lowCount, imgurl))
+            conn.commit()
+        except:
+            conn.rollback()
         conn.close()
 
     def get_items(self):
@@ -32,8 +34,11 @@ class db_access:
     def add_user(self, username, hashed_pass, clearance):
         conn = self.connect()
         cursor = conn.cursor()
-        cursor.execute("INSERT INTO users (username, passwordHash, clearance) VALUES (?,?,?)", (username, hashed_pass, clearance))
-        conn.commit()
+        try:
+            cursor.execute("INSERT INTO users (username, passwordHash, clearance) VALUES (?,?,?)", (username, hashed_pass, clearance))
+            conn.commit()
+        except:
+            conn.rollback()
         conn.close()
         
 
@@ -41,6 +46,6 @@ class db_access:
         conn = self.connect()
         cursor = conn.cursor()
         cursor.execute("SELECT * FROM users WHERE username = (?)", (username,))
-        user = cursor.fetchall()[0]
+        user = cursor.fetchall()
         conn.close()
         return user
