@@ -61,8 +61,10 @@
                     <div class="tag"><span>X</span> tag</div>
                 </div>
             </div>
-            <div class="edit-btn" onclick="editItem({{item.id}})">✎</div>
-            <div class="note">Note: Only roles that can edit items and such see this button</div>
+            {% if session['clearance'] == 3 %}
+                <div class="edit-btn" onclick="editItem({{item.id}})">✎</div>
+                <div class="note">Note: Only roles that can edit items and such see this button</div>
+            {% endif %}
         </div>
     {% endfor %}
 <script src="{{ url_for('static', filename='inventory-script.js') }}"></script>
