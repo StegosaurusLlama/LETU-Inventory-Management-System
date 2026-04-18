@@ -66,7 +66,7 @@ class db_access:
     
     def apply_tag(self, productID, tagID):
         query = "INSERT INTO ProductTag (productID, tagID) VALUES (?,?)"
-        args = (productID, tagID,)
+        args = (productID, tagID)
         return self._edit_data(query, args)
     
     def remove_tag(self, productID, tagID):
@@ -82,4 +82,5 @@ class db_access:
     def get_tags(self, productID):
         query = "SELECT T.* FROM ProductTag P INNER JOIN Tag T ON P.tagID = T.tagID WHERE P.productID = ?"
         args = (productID,)
+        print( self._get_data(query, args))
         return self._get_data(query, args)

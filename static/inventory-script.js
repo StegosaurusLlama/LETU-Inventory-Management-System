@@ -18,8 +18,9 @@ function closeAddItem() {
     document.getElementById("add-item").style.display = "none";
 }
 
-function openAddTag() {
+function openAddTag(id) {
     document.getElementById("add-tag").style.display = "block";
+    document.getElementById("add-tag-pid").value = id;
     console.log("here")
 }
 
@@ -37,3 +38,14 @@ window.onclick = function(event) {
         addTag.style.display = "none";
     }
 }
+
+window.addEventListener("beforeunload", function () {
+    localStorage.setItem("scrollY", window.scrollY);
+});
+
+window.addEventListener("load", function () {
+    const scrollY = localStorage.getItem("scrollY");
+    if (scrollY !== null) {
+        window.scrollTo(0, parseInt(scrollY));
+    }
+});
