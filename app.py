@@ -22,6 +22,12 @@ def login():
 	username = "testing"
 	return render_template("log-in.html", name=username)
 
+@app.route("/log-out", methods=["POST"])
+def log_out():
+	session["user"] = ""
+	session["clearance"] = 0
+	return redirect(url_for("login"))
+
 @app.route("/login-submit", methods=["POST"])
 def login_attempt():
 	username = request.form.get("username")
