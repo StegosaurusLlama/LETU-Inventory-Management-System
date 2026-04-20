@@ -11,7 +11,7 @@ app.secret_key = secrets.token_hex(16)
 
 @app.route("/")
 def default():
-	return redirect(url_for("inventory"))
+	return redirect(url_for("login"))
 	
 @app.route("/test")
 def test():
@@ -21,6 +21,12 @@ def test():
 def login():
 	username = "testing"
 	return render_template("log-in.html", name=username)
+
+@app.route("/log-out", methods=["POST"])
+def log_out():
+	session["user"] = ""
+	session["clearance"] = 0
+	return redirect(url_for("login"))
 
 @app.route("/login-submit", methods=["POST"])
 def login_attempt():
@@ -41,6 +47,9 @@ def login_attempt():
 def create_user():
 	return render_template("user-create.html")
 
+@app.route("/user-accounts")
+def user_account():
+	return render_template("user-accounts.html")
 
 @app.route("/create-user-submit", methods=["POST"])
 def create_user_submit():
