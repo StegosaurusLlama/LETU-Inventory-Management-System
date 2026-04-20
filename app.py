@@ -24,8 +24,7 @@ def login():
 
 @app.route("/log-out", methods=["POST"])
 def log_out():
-	session["user"] = ""
-	session["clearance"] = 0
+	session.clear()
 	return redirect(url_for("login"))
 
 @app.route("/login-submit", methods=["POST"])
@@ -43,10 +42,6 @@ def login_attempt():
 	else: #failed login
 		return redirect(url_for("login"))
 
-@app.route("/create-user")
-def create_user():
-	return render_template("user-create.html")
-
 @app.route("/user-accounts")
 def user_account():
 	return render_template("user-accounts.html")
@@ -58,7 +53,7 @@ def create_user_submit():
 	clearance = request.form.get("clearance")
 	hashed_pass = generate_password_hash(password)
 	db.add_user(username, hashed_pass, clearance)
-	return redirect(url_for("create_user"))
+	return redirect(url_for("user_account"))
 
 @app.route("/inventory")
 def inventory():
