@@ -36,7 +36,8 @@ def login_attempt():
 		return redirect(url_for("login"))
 	user = users[0]
 	if check_password_hash(user["passwordHash"], password): #successful login
-		session["user"] = user["userID"] #user ID
+		session["userID"] = user["userID"] #user ID
+		session["username"] = user["username"] #user ID
 		session["clearance"] = user["clearance"]
 		return redirect(url_for("inventory"))
 	else: #failed login
