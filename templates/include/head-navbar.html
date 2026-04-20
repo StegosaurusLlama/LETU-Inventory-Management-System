@@ -1,12 +1,12 @@
 <header class="tab-container">
     <nav class="navbar navbar-expand-lg custom-navbar">
         <div class="container-fluid">
-            <div class="navbar-nav">
+            <div class="navbar-nav w-100">
                 <a class="nav-link nav-btn active" href="{{url_for('inventory')}}">Inventory</a>
                 <a class="nav-link nav-btn" href="{{url_for('login')}}">Audit Log</a>
                 <a class="nav-link nav-btn" href="{{url_for('user_account')}}">User Account</a>
                 <form id="log-out-form" action="/log-out" method="POST"></form>
-                <button class="nav-link nav-btn" type="submit" form="log-out-form">Log out</a>
+                <button class="nav-link nav-btn ms-auto" type="submit" form="log-out-form">Log out</a>
 
             </div>
         </div>
