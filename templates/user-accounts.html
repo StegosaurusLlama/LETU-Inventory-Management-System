@@ -15,11 +15,11 @@
         <div class="container mt-2" style="max-width: 400px;">
             <div class="input-group mb-3">
                 <span class="input-group-text">Username</span>
-                <input type="text" class="form-control" value="{{ user_name }}" readonly>
+                <input type="text" class="form-control" value="{{session['username']}}" readonly>
             </div>
             <div class="input-group mb-3">
                 <span class="input-group-text">Password</span>
-                <input type="text" class="form-control" placeholder="********" readonly>
+                <input type="PASSWORD" class="form-control" value="********" readonly>
             </div>
 
             <button type="button" class="btn btn-outline-primary w-10" data-bs-toggle="modal" data-bs-target="#changePasswordModal">
@@ -32,11 +32,11 @@
             <div class="container mt-5" style="max-width: 400px;">
                 <form action="/create-user-submit" method="POST">
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" name = "username">
+                        <input type="text" class="form-control" placeholder=s aria-label="Username" aria-describedby="basic-addon1" name = "username">
                     </div>
 
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" placeholder="Password" aria-label="Recipient’s username" aria-describedby="basic-addon2" name = "password">
+                        <input type="password" class="form-control" placeholder="Password" aria-label="Recipient’s username" aria-describedby="basic-addon2" name = "password">
                     </div>
                     
                     <input type="number" name = "clearance" placeholder="clearance"><br><br>
