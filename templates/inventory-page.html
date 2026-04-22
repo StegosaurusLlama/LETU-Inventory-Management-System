@@ -39,20 +39,6 @@
         </div>
     </div>
 
-    {% if session['clearance'] == 3 %}
-        <div id="add-tag" class="add-tag">
-            <div class="add-tag-content">
-                <p>Add Item</p> 
-                <form action="/submit-tag" method="POST">
-                    <input type="hidden" id="add-tag-pid" name="productID">
-                    <input type="text" placeholder="Name" name="name">
-                    <br>
-                    <input type="submit" value="Submit">
-                </form>
-            </div>
-        </div>
-    {% endif %}
-
     {% for item in items %}
         <div class="item-card">
             <img src="{{item.image}}" alt="No Image Found" class="item-image">
@@ -70,42 +56,64 @@
             {% if session['clearance'] == 3 %}
                 <!-- <div class="edit-btn" onclick="editItem({{item.productID}})">✎</div> -->
                 <!-- <div class="note">Note: Only roles that can edit items and such see this button</div> -->
-                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">✎</button>
-<div class="modal" id="myModal">
-<div class="modal-dialog modal-dialog-centered">
-<div class="modal-dialog">
-<div class="modal-content">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">✎</button>
 
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h4 class="modal-title">Edit Item Name:</h4>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
+                <div class="modal" id="myModal">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
 
-      <!-- Modal body -->
-      <div class="modal-body">
-        <form>
-            <input type="text" placeholder="New Name">
-            <input type="hidden" id="edit-item-pid" name="productID">
-        </form>
-      </div>
+                                <!-- Modal Header -->
+                                <div class="modal-header">
+                                    <h4 class="modal-title">Edit Item Name:</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
 
-      <!-- Modal footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-      </div>
+                                <!-- Modal body -->
+                                <form action="submit-item-edit" method="POST">
+                                    <form>
+                                        <input type="text" placeholder="New Name">
+                                        <input type="hidden" name="productID" value="{{item.productID}}">
+                                    </form>
+                                </div>
 
-</div>
-</div>
-</div>
-</div>
+                                <!-- Modal footer -->
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
             {% if session['clearance'] == 3 %}
                 <br>    
-                <div>
-                    <button onclick="openAddTag({{ item.productID }})" class="add-tag-btn">Add Tag</button>
-                </div>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tag-modal-{{item.productID}}">Add Tag</button>
+                
+                <div class="modal" id="tag-modal-{{item.productID}}">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                                <!-- Modal Header -->
+                            <div class="modal-header">
+                                <h4 class="modal-title">Enter tag name:</h4>
+                            </div>
 
+                            <!-- Modal body -->
+                            <div class="modal-body">
+                                <form action="submit-tag" method="POST">
+                                    <input type="text" placeholder="name" name="name">
+                                    <input type="hidden" name="productID" value="{{item.productID}}">
+                                </form>
+                            </div>
+
+                            <!-- Modal footer -->
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             {% endif %}
         </div>
     {% endfor %}
