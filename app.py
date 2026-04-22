@@ -101,5 +101,14 @@ def submit_tag():
 def images(filename):
 	return send_from_directory('images', filename)
 
+@app.route("/edit-item", methods=["POST"])
+def edit_item():
+    name = request.form.get("name")
+    db._edit_item(name)
+    productID = request.form.get("productID")
+    
+    return redirect(url_for("inventory"))
+    
+
 if __name__ == "__main__":
     app.run(debug=True)
