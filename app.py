@@ -104,9 +104,9 @@ def images(filename):
 @app.route("/edit-item", methods=["POST"])
 def edit_item():
     name = request.form.get("name")
-    db._edit_item(name)
+    desc = request.form.get("description")
     productID = request.form.get("productID")
-    
+    db.edit_item(productID, name, desc)
     return redirect(url_for("inventory"))
     
 
