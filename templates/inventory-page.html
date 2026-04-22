@@ -72,8 +72,10 @@
                                 <!-- Modal body -->
                                 <form action="submit-item-edit" method="POST">
                                     <form>
-                                        <input type="text" placeholder="New Name">
-                                        <input type="hidden" name="productID" value="{{item.productID}}">
+                                        <input type="text" placeholder="New Name" name="name">
+                                        <input type="text" placeholder="New Description" name="description">
+                                        <input type="hidden" id="edit-item-pid" name="productID">
+                                        <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
                                     </form>
                                 </div>
 
