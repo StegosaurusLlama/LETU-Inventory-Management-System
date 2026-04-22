@@ -93,7 +93,7 @@ def submit_tag():
 	name = request.form.get("name")
 	db.make_tag(name)
 	productID = request.form.get("productID")
-	row = db._get_data("SELECT tagID FROM Tag WHERE name = ?", (name,))[0]
+	row = db.get_tag_by_name(name)[0]
 	db.apply_tag(productID, row["tagID"])
 	return redirect(url_for("inventory"))
 
