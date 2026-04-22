@@ -56,33 +56,31 @@
             {% if session['clearance'] == 3 %}
                 <!-- <div class="edit-btn" onclick="editItem({{item.productID}})">✎</div> -->
                 <!-- <div class="note">Note: Only roles that can edit items and such see this button</div> -->
-                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">✎</button>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#item-modal-{{item.productID}}">✎</button>
 
-                <div class="modal" id="myModal">
+                <div class="modal" id="item-modal-{{item.productID}}">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-dialog">
                             <div class="modal-content">
 
                                 <!-- Modal Header -->
                                 <div class="modal-header">
-                                    <h4 class="modal-title">Edit Item Name:</h4>
+                                    <h4 class="modal-title">Edit Item:</h4>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                                 </div>
 
                                 <!-- Modal body -->
-                                <form action="submit-item-edit" method="POST">
-                                    <form>
-                                        <input type="text" placeholder="New Name" name="name">
-                                        <input type="text" placeholder="New Description" name="description">
-                                        <input type="hidden" id="edit-item-pid" name="productID">
-                                        <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
-                                    </form>
-                                </div>
+                                <form action="submit-edit-item" method="POST">
+                                    <input type="text" placeholder="New Name" name="name" value="{{item.name}}">
+                                    <textarea type="text" placeholder="New Description" name="description">{{item.description}}</textarea>
+                                    <input type="hidden" value="{{item.productID}}" name="productID">
+                                    <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
+                                </form>
 
                                 <!-- Modal footer -->
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-                                </div>
+                                <!-- <div class="modal-footer"> -->
+                                    <!-- <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button> -->
+                                <!-- </div> -->
 
                             </div>
                         </div>

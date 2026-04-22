@@ -101,7 +101,7 @@ def submit_tag():
 def images(filename):
 	return send_from_directory('images', filename)
 
-@app.route("/edit-item", methods=["POST"])
+@app.route("/submit-edit-item", methods=["POST"])
 def edit_item():
     name = request.form.get("name")
     desc = request.form.get("description")
