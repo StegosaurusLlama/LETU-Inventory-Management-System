@@ -42,10 +42,14 @@ class db_access:
         query = "SELECT * FROM StockItem"
         return self._get_data(query)
 
+    def edit_item(self, product_id, name, desc):
+        query = "UPDATE StockItem SET name = ?, description = ? WHERE productID = ?"
+        args = (name, desc, product_id)
+        return self._edit_data(query, args)
+
     def add_user(self, username, hashed_pass, clearance):
         query = "INSERT INTO Users (username, passwordHash, clearance) VALUES (?,?,?)"
         args = (username, hashed_pass, clearance)
-       
         return self._edit_data(query, args)
 
     def get_user_info(self, username):
