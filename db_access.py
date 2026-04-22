@@ -41,10 +41,20 @@ class db_access:
     def get_items(self):
         query = "SELECT * FROM StockItem"
         return self._get_data(query)
-
+    
     def edit_item(self, product_id, name, desc):
         query = "UPDATE StockItem SET name = ?, description = ? WHERE productID = ?"
         args = (name, desc, product_id)
+        return self._edit_data(query, args)
+    
+    def edit_item_name(self, product_id, name):
+        query = "UPDATE StockItem SET name = ? WHERE productID = ?"
+        args = (name, product_id)
+        return self._edit_data(query, args)
+    
+    def edit_item_desc(self, product_id, desc):
+        query = "UPDATE StockItem SET description = ? WHERE productID = ?"
+        args = (desc, product_id)
         return self._edit_data(query, args)
 
     def add_user(self, username, hashed_pass, clearance):
