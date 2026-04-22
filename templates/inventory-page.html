@@ -10,34 +10,7 @@
 </head>
 <body>
     {% include 'include/head-navbar.html' %}  
-    <div class="search-bar">
-        <input type="text" placeholder="Search...">
-    </div>
-
-    <div>
-        <button onclick="openAddItem()">Add Item</button>
-    </div>
-
-    <div id="add-item" class="add-item">
-        <div class="add-item-content">
-            <p>Add Item</p>
-            <form action="/submit-item" method="POST" enctype="multipart/form-data">
-                <input type="text" placeholder="Product Name" name="name">
-                <br>
-                <input type="number" step="0.01" min="0" placeholder="Enter Price" name="price">
-                <br>
-                <input type="number" min="0" placeholder="Enter Initial Stock" name="amount">
-                <br>
-                <textarea placeholder="Enter Description" name="desc"></textarea>
-                <br>
-                <input type="number" min="0" placeholder="Enter Low Threshhold" name="lowCount">
-                <br>
-                <input type="file" accept="image/*" name="imageFile">
-                <br>
-                <input type="submit" value="Submit">
-            </form>
-        </div>
-    </div>
+    
 
     {% for item in items %}
         <div class="item-card">
