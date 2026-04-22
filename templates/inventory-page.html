@@ -68,7 +68,7 @@
                 </div>
             </div>
             {% if session['clearance'] == 3 %}
-                <div class="edit-btn" onclick="editItem({{item.id}})">✎</div>
+                <div class="edit-btn" onclick="editItem({{item.productID}})">✎</div>
                 <div class="note">Note: Only roles that can edit items and such see this button</div>
             {% endif %}
             {% if session['clearance'] == 3 %}
