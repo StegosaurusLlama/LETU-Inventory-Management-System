@@ -68,8 +68,37 @@
                 </div>
             </div>
             {% if session['clearance'] == 3 %}
-                <div class="edit-btn" onclick="editItem({{item.productID}})">✎</div>
-                <div class="note">Note: Only roles that can edit items and such see this button</div>
+                <!-- <div class="edit-btn" onclick="editItem({{item.productID}})">✎</div> -->
+                <!-- <div class="note">Note: Only roles that can edit items and such see this button</div> -->
+                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#myModal">✎</button>
+<div class="modal" id="myModal">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-dialog">
+<div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Edit Item Name:</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form>
+            <input type="text" placeholder="New Name">
+            <input type="hidden" id="edit-item-pid" name="productID">
+        </form>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+</div>
+</div>
+</div>
+</div>
             {% endif %}
             {% if session['clearance'] == 3 %}
                 <br>    

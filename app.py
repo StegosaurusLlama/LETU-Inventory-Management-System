@@ -82,15 +82,22 @@ def submit_tag():
 	name = request.form.get("name")
 	db.make_tag(name)
 	productID = request.form.get("productID")
-	print(productID)
 	row = db._get_data("SELECT tagID FROM Tag WHERE name = ?", (name,))[0]
-	print(row["tagID"])
 	db.apply_tag(productID, row["tagID"])
 	return redirect(url_for("inventory"))
 
 @app.route("/images/<filename>")
 def images(filename):
 	return send_from_directory('images', filename)
+
+@app.route("/edit-item", methods=["POST"])
+def edit_item():
+    name = request.form.get("name")
+    db._edit_item(name)
+    productID = request.form.get("productID")
+    
+    return redirect(url_for("inventory"))
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
