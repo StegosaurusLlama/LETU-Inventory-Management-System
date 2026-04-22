@@ -9,6 +9,12 @@ db = db_access()
 
 app.secret_key = secrets.token_hex(16)
 
+
+@app.before_request
+def check_session():
+	if "clearance" not in session and request.endpoint not in ["login", "login_attempt"]:
+		return redirect(url_for("login"))
+
 @app.route("/")
 def default():
 	return redirect(url_for("login"))
@@ -56,6 +62,11 @@ def create_user_submit():
 	db.add_user(username, hashed_pass, clearance)
 	return redirect(url_for("user_account"))
 
+@app.route("/change-password", methods=["POST"])
+def change_password():
+	db.change_password(session["userID"], generate_password_hash(request.form.get("password")))
+	return redirect(url_for("user_account"))
+
 @app.route("/inventory")
 def inventory():
 	# connect to database, update html
@@ -82,9 +93,7 @@ def submit_tag():
 	name = request.form.get("name")
 	db.make_tag(name)
 	productID = request.form.get("productID")
-	print(productID)
 	row = db._get_data("SELECT tagID FROM Tag WHERE name = ?", (name,))[0]
-	print(row["tagID"])
 	db.apply_tag(productID, row["tagID"])
 	return redirect(url_for("inventory"))
 

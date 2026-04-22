@@ -40,7 +40,6 @@ class db_access:
 
     def get_items(self):
         query = "SELECT * FROM StockItem"
-        print(self._get_data(query))
         return self._get_data(query)
 
     def add_user(self, username, hashed_pass, clearance):
@@ -53,6 +52,11 @@ class db_access:
         query = "SELECT * FROM Users WHERE username = ?"
         args = (username,)
         return self._get_data(query, args)
+    
+    def change_password(self, user_id, new_password):
+        query = "UPDATE Users SET passwordHash = ? WHERE userID = ?"
+        args = (new_password, user_id)
+        return self._edit_data(query, args)
     
     def make_tag(self, tagname):
         query = "INSERT INTO Tag (name) VALUES (?)"
@@ -82,5 +86,4 @@ class db_access:
     def get_tags(self, productID):
         query = "SELECT T.* FROM ProductTag P INNER JOIN Tag T ON P.tagID = T.tagID WHERE P.productID = ?"
         args = (productID,)
-        print( self._get_data(query, args))
         return self._get_data(query, args)
