@@ -9,15 +9,6 @@ function editItem(id) {
     }
 }
 
-function openAddItem() {
-    document.getElementById("add-item").style.display = "block";
-    console.log("here")
-}
-
-function closeAddItem() {
-    document.getElementById("add-item").style.display = "none";
-}
-
 function openAddTag(id) {
     document.getElementById("add-tag").style.display = "block";
     document.getElementById("add-tag-pid").value = id;

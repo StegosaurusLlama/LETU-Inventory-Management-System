@@ -7,38 +7,51 @@
                 <a class="nav-link nav-btn" href="{{url_for('login')}}">Audit Log</a>
                 <a class="nav-link nav-btn" href="{{url_for('user_account')}}">User Account</a>
                 <form id="log-out-form" action="/log-out" method="POST"></form>
-                <button class="nav-link nav-btn ms-auto" type="submit" form="log-out-form">Log out</a>
+                <button class="nav-link nav-btn ms-auto" type="submit" form="log-out-form">Log out</button>
             </div>
             {% if request.endpoint == 'inventory' %}
-                <div class="row w-100">
-                    <div class="search-bar col-sm-2">
-                        <button class="nav-btn" onclick="openAddItem()">Add Item</button>
-                    </div>
-                    <div class="search-bar col-sm-10">
-                        <input type="text" placeholder="Search...">
-                    </div>
-                        <div id="add-item" class="add-item">
-                        <div class="add-item-content">
-                            <p>Add Item</p>
-                            <form action="/submit-item" method="POST" enctype="multipart/form-data">
-                                <input type="text" placeholder="Product Name" name="name">
-                                <br>
-                                <input type="number" step="0.01" min="0" placeholder="Enter Price" name="price">
-                                <br>
-                                <input type="number" min="0" placeholder="Enter Initial Stock" name="amount">
-                                <br>
-                                <textarea placeholder="Enter Description" name="desc"></textarea>
-                                <br>
-                                <input type="number" min="0" placeholder="Enter Low Threshhold" name="lowCount">
-                                <br>
-                                <input type="file" accept="image/*" name="imageFile">
-                                <br>
-                                <input type="submit" value="Submit">
-                            </form>
-                        </div>
-                    </div>
+            <div class="row w-100">
+                <div class="search-bar col-sm-2">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-item-modal">Add
+                        Item</button>
                 </div>
-            {% endif %}
+                <div class="search-bar col-sm-10">
+                    <input type="text" placeholder="Search...">
+                </div>
+            </div>
+
         </div>
+        {% endif %}
     </nav>
 </header>
+{% if request.endpoint == 'inventory' %}
+<div class="modal fade" id="add-item-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title w-100 text-center">Add Item</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form action="/submit-item" method="POST" enctype="multipart/form-data">
+                    <input type="text" class="form-control" placeholder="Product Name" name="name">
+                    <br>
+                    <input type="number" class="form-control" step="0.01" min="0" placeholder="Enter Price" name="price">
+                    <br>
+                    <input type="number" class="form-control" min="0" placeholder="Enter Initial Stock" name="amount">
+                    <br>
+                    <textarea class="form-control" placeholder="Enter Description" name="desc"></textarea>
+                    <br>
+                    <input type="number" class="form-control" min="0" placeholder="Enter Low Threshhold" name="lowCount">
+                    <br>
+                    <input type="file" class="form-control"accept="image/*" name="imageFile">
+                    <br>
+                    <input type="submit" class="form-control" value="Submit">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
