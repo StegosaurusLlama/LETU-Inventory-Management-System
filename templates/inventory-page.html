@@ -30,7 +30,7 @@
                 {% if session['clearance'] == 3 %}
                 <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                     data-bs-target="#tag-modal-{{item.productID}}">Add Tag</button>
-                {% endif %}
+                {% endif %}               
                 <div class="tag-list">
                     {% for tag in item.tags %}
                     <div class="tag container-fluid px-1">
