@@ -106,3 +106,8 @@ class db_access:
         query = "SELECT * FROM Tag WHERE name = ?"
         args = (name,)
         return self._get_data(query, args)
+    
+    def search_items(self, search, tags=[]):
+        query = "SELECT * FROM StockItem WHERE name LIKE ?"
+        args = ("%"+search+"%",)
+        return self._get_data(query, args)

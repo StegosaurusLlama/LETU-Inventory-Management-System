@@ -70,10 +70,13 @@ def change_password():
 @app.route("/inventory")
 def inventory():
 	# connect to database, update html
-	rows = db.get_items()
+	search = request.args.get("search")
+	if not search:
+		search = ""
+	rows = db.search_items(search)
 	for r in rows:
 		r["tags"] = db.get_tags(r["productID"])
-	return render_template("inventory-page.html", items=rows)
+	return render_template("inventory-page.html", items=rows, search=search)
 
 @app.route("/submit-item", methods=["POST"])
 def submit_item():
@@ -103,12 +106,18 @@ def images(filename):
 
 @app.route("/submit-edit-item", methods=["POST"])
 def edit_item():
-    name = request.form.get("name")
-    desc = request.form.get("description")
-    productID = request.form.get("productID")
-    db.edit_item(productID, name, desc)
-    return redirect(url_for("inventory"))
+	name = request.form.get("name")
+	desc = request.form.get("description")
+	productID = request.form.get("productID")
+	db.edit_item(productID, name, desc)
+	return redirect(url_for("inventory"))
     
+
+@app.route("/submit-search", methods=["POST"])
+def submit_search():
+	search = request.form.get("search")
+	return redirect(url_for("inventory")+"?search="+search)
+
 
 if __name__ == "__main__":
     app.run(debug=True)

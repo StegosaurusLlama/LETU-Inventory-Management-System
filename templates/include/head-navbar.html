@@ -1,27 +1,32 @@
 <header class="sticky-top">
     <nav class="navbar navbar-expand-sm custom-navbar">
-        <div class="container-fluid flex-column">
+        <div class="container-fluid">
 
-            <div class="navbar-nav w-100">
+            <div class="navbar-nav d-flex w-100">
                 <a class="nav-link nav-btn active" href="{{url_for('inventory')}}">Inventory</a>
+                {% if session.clearance == 3 %}
                 <a class="nav-link nav-btn" href="{{url_for('login')}}">Audit Log</a>
+                {% endif %}
                 <a class="nav-link nav-btn" href="{{url_for('user_account')}}">User Account</a>
-                <form id="log-out-form" action="/log-out" method="POST"></form>
-                <button class="nav-link nav-btn ms-auto" type="submit" form="log-out-form">Log out</button>
-            </div>
-            {% if request.endpoint == 'inventory' %}
-            <div class="row w-100">
-                <div class="search-bar col-sm-2">
+                {% if request.endpoint == 'inventory' %}
+                <div class="search-bar col-auto">
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-item-modal">Add
                         Item</button>
                 </div>
-                <div class="search-bar col-sm-10">
-                    <input type="text" placeholder="Search...">
+                <div class="search-bar col-auto flex-grow-1">
+                    <form action="submit-search" method="POST"> <!--Search bar-->
+                        <div class="input-group">
+                            <input type="text" placeholder="Search..." name="search" value="{{search}}">
+                        </div>
+                    </form>
                 </div>
+                {% endif %}
+                <form id="log-out-form" action="/log-out" method="POST"></form>
+                <button class="nav-link nav-btn ms-auto flex-shrink-0" type="submit" form="log-out-form">Log
+                    out</button>
             </div>
-
         </div>
-        {% endif %}
+
     </nav>
 </header>
 {% if request.endpoint == 'inventory' %}
@@ -38,15 +43,20 @@
                 <form action="/submit-item" method="POST" enctype="multipart/form-data">
                     <input type="text" class="form-control" placeholder="Product Name" name="name">
                     <br>
-                    <input type="number" class="form-control" step="0.01" min="0" placeholder="Enter Price" name="price">
+                    <div class="input-group">
+                        <span class="input-group-text">$</span>
+                        <input type="number" class="form-control" step="0.01" min="0" placeholder="Enter Price"
+                            name="price">
+                    </div>
                     <br>
                     <input type="number" class="form-control" min="0" placeholder="Enter Initial Stock" name="amount">
                     <br>
                     <textarea class="form-control" placeholder="Enter Description" name="desc"></textarea>
                     <br>
-                    <input type="number" class="form-control" min="0" placeholder="Enter Low Threshhold" name="lowCount">
+                    <input type="number" class="form-control" min="0" placeholder="Enter Low Threshhold"
+                        name="lowCount">
                     <br>
-                    <input type="file" class="form-control"accept="image/*" name="imageFile">
+                    <input type="file" class="form-control" accept="image/*" name="imageFile">
                     <br>
                     <input type="submit" class="form-control" value="Submit">
                 </form>
