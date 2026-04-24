@@ -2,6 +2,7 @@ from flask import *
 from db_access import db_access
 import secrets
 from werkzeug.security import generate_password_hash, check_password_hash
+from pathlib import Path
 
 app = Flask(__name__)
 
@@ -9,6 +10,11 @@ db = db_access()
 
 app.secret_key = secrets.token_hex(16)
 
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SECURE=True, 
+    SESSION_COOKIE_SAMESITE='Strict' 
+)
 
 @app.before_request
 def check_session():
@@ -76,6 +82,13 @@ def inventory():
 	rows = db.search_items(search)
 	for r in rows:
 		r["tags"] = db.get_tags(r["productID"])
+		if not r["lowThreshhold"] or r["quantity"] > r["lowThreshhold"]:
+			r["color"] = "#FFFFFF"
+		elif r["quantity"] > 0:
+			r["color"] = "#FFAA0C"
+		else:
+			r["color"] = "#E44242"	
+			
 	return render_template("inventory-page.html", items=rows, search=search)
 
 @app.route("/submit-item", methods=["POST"])
@@ -86,7 +99,7 @@ def submit_item():
 	desc = request.form.get("desc")
 	lowCount = request.form.get("lowCount")
 	imageFile = request.files['imageFile']
-	imagePath = "images/" + imageFile.filename
+	imagePath = "images/" + name + Path(imageFile.filename).suffix
 	imageFile.save(imagePath)
 	db.add_item(name, price, amount, desc, lowCount, imagePath)
 	return redirect(url_for("inventory"))
@@ -98,6 +111,8 @@ def submit_tag():
 	productID = request.form.get("productID")
 	row = db.get_tag_by_name(name)[0]
 	db.apply_tag(productID, row["tagID"])
+	if not name:
+		return "FAIL"
 	return redirect(url_for("inventory"))
 
 @app.route("/images/<filename>")
@@ -112,6 +127,13 @@ def edit_item():
 	db.edit_item(productID, name, desc)
 	return redirect(url_for("inventory"))
     
+@app.route("/remove-tag", methods=["POST"])
+def remove_tag():
+    productID = request.form.get("productID")
+    tagID = request.form.get("tagID")
+    db.remove_tag(productID, tagID)
+    return redirect(url_for("inventory"))
+
 
 @app.route("/submit-search", methods=["POST"])
 def submit_search():
