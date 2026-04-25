@@ -81,7 +81,7 @@ def inventory():
 		search = ""
 	rows = db.search_items(search)
 	for r in rows:
-		r["tags"] = db.get_tags(r["productID"])
+		r["tags"] = db.get_product_tags(r["productID"])
 		if not r["lowThreshhold"] or r["quantity"] > r["lowThreshhold"]:
 			r["color"] = "#FFFFFF"
 		elif r["quantity"] > 0:

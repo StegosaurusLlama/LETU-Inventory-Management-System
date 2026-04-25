@@ -97,10 +97,14 @@ class db_access:
         args = (tagID,)
         return self._get_data(query, args)
     
-    def get_tags(self, productID):
+    def get_product_tags(self, productID):
         query = "SELECT T.* FROM ProductTag P INNER JOIN Tag T ON P.tagID = T.tagID WHERE P.productID = ?"
         args = (productID,)
         return self._get_data(query, args)
+    
+    def get_tags(self):
+        query= "SELECT * FROM Tag"
+        return self._get_data(query)
     
     def get_tag_by_name(self, name):
         query = "SELECT * FROM Tag WHERE name = ?"
