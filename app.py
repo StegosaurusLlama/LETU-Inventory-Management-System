@@ -112,9 +112,12 @@ def submit_item():
 
 @app.route("/submit-tag", methods=["POST"])
 def submit_tag():
-	name = request.form.get("name")
+	name = request.form.get("name") or ""
+	tags = request.form.getlist("tags") or []
 	db.make_tag(name)
 	productID = request.form.get("productID")
+	for tagID in tags:
+		db.apply_tag(productID, tagID)
 	row = db.get_tag_by_name(name)[0]
 	db.apply_tag(productID, row["tagID"])
 	if not name:

@@ -15,46 +15,51 @@
     {% include 'include/head-navbar.html' %}
 
     {% for item in items %}
-    <div class="item-card w-80" style="background-color: {{item.color}}">
-        <img src="{{item.image}}" alt="No Image Found" class="item-image">
-        <div class="item-info">
-            <h2 id="name-{{item.productID}}">{{item.name}}</h2>
-            <div id="attributes-{item.productID}" quantity="{{item.quantity}}" low-threshhold="{{item.lowThreshhold}}">
+    <div class="item-card container" style="background-color: {{item.color}}">
+        <div class="d-flex w-100 m-1">
+            <div>
+                <img src="{{item.image}}" alt="No Image Found" class="item-image border border-2 border-dark">
             </div>
-            <p>Item #: {{item.productID}}</p>
-            <p>Price: ${{item.price}}</p>
-            <p class="w-100" style="white-space: pre-line;">Description: {{item.description}}</p>
-
-            <div class="w-100 d-flex text-nowrap overflow-hidden">
-                {% if session['clearance'] == 3 %}
-                <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
-                    data-bs-target="#tag-modal-{{item.productID}}">Add Tag</button>
-                {% endif %}
-                <div class="tag-list">
-                    {% for tag in item.tags %}
-                    <div class="tag container-fluid px-1">
-                        <p class="m-1">{{tag.name}}</p>
-                        {% if session.clearance == 3 %}
-                        <form action="remove-tag" method="POST">
-                            <input type="hidden" value="{{tag.tagID}}" name="tagID">
-                            <input type="hidden" value="{{item.productID}}" name="productID">
-                            <input type="submit" class="btn-sm btn-close" value="">
-                        </form>
-                        {% endif %}
-                    </div>
-                    {% endfor %}
+            <div class="flex-grow-1 item-info w-100">
+                <h2 id="name-{{item.productID}}">{{item.name}}</h2>
+                <div id="attributes-{item.productID}" quantity="{{item.quantity}}"
+                    low-threshhold="{{item.lowThreshhold}}">
                 </div>
+                <p>Item #: {{item.productID}}</p>
+                <p>Price: ${{item.price}}</p>
+                <p class="w-100 overflow-auto" style="max-height: 60px;">Description: {{item.description}}</p>
+            </div>
+            {% if session['clearance'] == 3 %}
+            <div class="align-items-center d-flex justify-content-end">
+                <button type="button" class="edit-item-btn btn btn-outline-primary rounded-circle"
+                    data-bs-toggle="modal" data-bs-target="#item-modal-{{item.productID}}">✎</button>
+            </div>
+            {% endif %}
+        </div>
+        <div class="w-100 d-flex text-nowrap align-items-center">
+            {% if session['clearance'] == 3 %}
+            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
+                data-bs-target="#tag-modal-{{item.productID}}">Edit Tags</button>
+            {% endif %}
+            <div class="tag-list overflow-auto ">
+                {% for tag in item.tags %}
+                <div class="tag d-flex align-items-center px-1 m-1">
+                    <p class="m-1">{{tag.name}}</p>
+                    {% if session.clearance == 3 %}
+                    <form action="remove-tag" method="POST">
+                        <input type="hidden" value="{{tag.tagID}}" name="tagID">
+                        <input type="hidden" value="{{item.productID}}" name="productID">
+                        <input type="submit" class="btn-sm btn-close" value="">
+                    </form>
+                    {% endif %}
+                </div>
+                {% endfor %}
             </div>
         </div>
         {% if session['clearance'] == 3 %}
         <!-- <div class="edit-btn" onclick="editItem({{item.productID}})">✎</div> -->
         <!-- <div class="note">Note: Only roles that can edit items and such see this button</div> -->
-        <div class="container align-items-center d-flex justify-content-end">
-            <button type="button" class="edit-item-btn btn btn-outline-primary rounded-circle" data-bs-toggle="modal"
-                data-bs-target="#item-modal-{{item.productID}}">✎</button>
 
-
-        </div>
 
 
 
@@ -116,7 +121,7 @@
                     <!-- Modal body -->
                     <div class="modal-body">
                         <form action="submit-tag" method="POST">
-                            <div class="dropdown" data-bs-auto-close="outside">
+                            <div class="dropdown" onclick="event.stopPropagation()">
                                 <button type="button" class="btn btn-primary col-auto" data-bs-toggle="dropdown"
                                     data-bs-target="#tag-filter-modal">Filter</button>
                                 <div class="dropdown-menu">
@@ -124,8 +129,8 @@
                                     <div class="d-flex flex-column m-2">
                                         {% for tag in tags %}
                                         <label class=" border rounded m-1">
-                                            <input type="checkbox" class="form-check-input m-1"
-                                                name="tags" value="{{tag.tagID}}">
+                                            <input type="checkbox" class="form-check-input m-1" name="tags"
+                                                value="{{tag.tagID}}">
                                             <label class="form-check-label flex-fill">{{tag.name}}</label>
                                         </label>
                                         {% endfor %}

@@ -13,7 +13,6 @@
 
 /* inventory list */
 .item-card {
-        display: flex;
         margin: 0px min(15%, 300px);
         padding: 20px;
         border-bottom: 1px solid #000000;
@@ -46,11 +45,9 @@
 }
 
 .tag-list {
-        margin-top: 10px;
         display: flex;
         flex-direction: row;
         /* flex-wrap: wrap; */
-        gap: 10px;
 }
 
 .tag {
