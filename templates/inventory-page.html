@@ -14,7 +14,6 @@
 <body>
     {% include 'include/head-navbar.html' %}
 
-
     {% for item in items %}
     <div class="item-card w-80" style="background-color: {{item.color}}">
         <img src="{{item.image}}" alt="No Image Found" class="item-image">
@@ -30,7 +29,7 @@
                 {% if session['clearance'] == 3 %}
                 <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal"
                     data-bs-target="#tag-modal-{{item.productID}}">Add Tag</button>
-                {% endif %}               
+                {% endif %}
                 <div class="tag-list">
                     {% for tag in item.tags %}
                     <div class="tag container-fluid px-1">
@@ -117,6 +116,23 @@
                     <!-- Modal body -->
                     <div class="modal-body">
                         <form action="submit-tag" method="POST">
+                            <div class="dropdown" data-bs-auto-close="outside">
+                                <button type="button" class="btn btn-primary col-auto" data-bs-toggle="dropdown"
+                                    data-bs-target="#tag-filter-modal">Filter</button>
+                                <div class="dropdown-menu">
+                                    <p class="text-center">Select tags:</p>
+                                    <div class="d-flex flex-column m-2">
+                                        {% for tag in tags %}
+                                        <label class=" border rounded m-1">
+                                            <input type="checkbox" class="form-check-input m-1"
+                                                name="tags" value="{{tag.tagID}}">
+                                            <label class="form-check-label flex-fill">{{tag.name}}</label>
+                                        </label>
+                                        {% endfor %}
+                                    </div>
+
+                                </div>
+                            </div>
                             <input type="text" placeholder="name" name="name">
                             <input type="hidden" name="productID" value="{{item.productID}}">
                         </form>

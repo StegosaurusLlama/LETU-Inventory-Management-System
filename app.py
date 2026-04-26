@@ -77,9 +77,15 @@ def change_password():
 def inventory():
 	# connect to database, update html
 	search = request.args.get("search")
+	search_tags = request.args.getlist("tags")
 	if not search:
 		search = ""
-	rows = db.search_items(search)
+	if not search_tags:
+		search_tags = []
+	rows = db.search_items(search, search_tags)
+	tags = db.get_tags()
+	if not rows:
+		rows = []
 	for r in rows:
 		r["tags"] = db.get_product_tags(r["productID"])
 		if not r["lowThreshhold"] or r["quantity"] > r["lowThreshhold"]:
@@ -89,7 +95,7 @@ def inventory():
 		else:
 			r["color"] = "#E44242"	
 			
-	return render_template("inventory-page.html", items=rows, search=search)
+	return render_template("inventory-page.html", items=rows, search=search, tags=tags)
 
 @app.route("/submit-item", methods=["POST"])
 def submit_item():
@@ -138,7 +144,11 @@ def remove_tag():
 @app.route("/submit-search", methods=["POST"])
 def submit_search():
 	search = request.form.get("search")
-	return redirect(url_for("inventory")+"?search="+search)
+	tags = request.form.getlist("tags")
+	url = url_for("inventory")+"?search="+search
+	for tag in tags:
+		url += "&tags=" + tag
+	return redirect(url)
 
 
 if __name__ == "__main__":

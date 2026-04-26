@@ -112,6 +112,6 @@ class db_access:
         return self._get_data(query, args)
     
     def search_items(self, search, tags=[]):
-        query = "SELECT * FROM StockItem WHERE name LIKE ?"
-        args = ("%"+search+"%",)
+        query = f"SELECT DISTINCT S.* FROM StockItem S {"INNER JOIN ProductTag P ON S.productID = P.productID" if tags else ""} WHERE S.name LIKE ?{f"AND P.tagID IN ({','.join(['?'] * len(tags))})" if tags else ""}"
+        args = (f"%{search}%",) + tuple(tags)
         return self._get_data(query, args)

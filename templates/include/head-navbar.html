@@ -13,8 +13,28 @@
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#add-item-modal">Add
                         Item</button>
                 </div>
+
+                <div class="dropdown" data-bs-auto-close="outside">
+                    <button type="button" class="btn btn-primary col-auto" data-bs-toggle="dropdown"
+                        data-bs-target="#tag-filter-modal">Filter</button>
+                    <div class="dropdown-menu">
+                        <p class="text-center">Select tags:</p>
+                        <div class="d-flex flex-column m-2">
+                            {% for tag in tags %}
+                            <label class=" border rounded m-1">
+                                <input type="checkbox" form="search-form" class="form-check-input m-1" name="tags"
+                                    value="{{tag.tagID}}">
+                                <label class="form-check-label flex-fill">{{tag.name}}</label>
+                            </label>
+                            {% endfor %}
+                        </div>
+
+                    </div>
+                </div>
+
+
                 <div class="search-bar col-auto flex-grow-1">
-                    <form action="submit-search" method="POST"> <!--Search bar-->
+                    <form action="submit-search" method="POST" id="search-form"> <!--Search bar-->
                         <div class="input-group">
                             <input type="text" placeholder="Search..." name="search" value="{{search}}">
                         </div>
