@@ -42,9 +42,9 @@ class db_access:
         query = "SELECT * FROM StockItem"
         return self._get_data(query)
     
-    def edit_item(self, product_id, name, desc):
-        query = "UPDATE StockItem SET name = ?, description = ? WHERE productID = ?"
-        args = (name, desc, product_id)
+    def edit_item(self, product_id, name, desc, price, quantity):
+        query = "UPDATE StockItem SET name = ?, description = ?, price = ?, quantity = ? WHERE productID = ?"
+        args = (name, desc, price, quantity, product_id)
         return self._edit_data(query, args)
     
     def edit_item_name(self, product_id, name):
