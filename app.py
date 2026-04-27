@@ -68,6 +68,14 @@ def create_user_submit():
 	db.add_user(username, hashed_pass, clearance)
 	return redirect(url_for("user_account"))
 
+@app.route("/edit-user-submit", methods=["POST"])
+def edit_user_submit():
+    username = request.form.get("username")
+    user_ID = db.get_user_info("username")
+    password = request.form.get("password")
+    db.change_password("user_ID", generate_password_hash(request.form.get("password")))
+    return redirect(url_for("user_account"))
+
 @app.route("/change-password", methods=["POST"])
 def change_password():
 	db.change_password(session["userID"], generate_password_hash(request.form.get("password")))
