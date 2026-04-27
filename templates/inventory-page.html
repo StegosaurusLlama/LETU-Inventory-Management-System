@@ -76,7 +76,7 @@
 
                         <!-- Modal Header -->
                         <div class="modal-header">
-                            <h4 class="modal-title">Edit Item:</h4>
+                            <h6 class="modal-title">Edit Item:</h6>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
 
@@ -154,7 +154,7 @@
                 <div class="modal-content">
                     <!-- Modal Header -->
                     <div class="modal-header">
-                        <h4 class="modal-title">Enter tag name:</h4>
+                        <h6 class="modal-title">Enter tag name:</h6>
                     </div>
 
                     <!-- Modal body -->
@@ -179,44 +179,13 @@
                             </div>
                             <input type="text" placeholder="name" name="name">
                             <input type="hidden" name="productID" value="{{item.productID}}">
+                            <div class="d-flex justify-content-end p-1">
+                                <input type="submit" class="btn btn-primary" value="Submit">
+                            </div>
                         </form>
                     </div>
-                    <div class="row p-2">
-                        <div class="col-12">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text"
-                                    id="inputGroup-desc-{{item.productID}}">Description</span>
-                                <textarea class="form-control" placeholder="New Description" name="description"
-                                    aria-label="Description"
-                                    aria-describedby="inputGroup-desc-{{item.productID}}">{{item.description}}</textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Price -->
-                    <div class="row p-2">
-                        <div class="col-12">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text">$</span>
-                                <input type="number" step="0.01" class="form-control" name="price"
-                                    value="{{item.price}}" placeholder="Price">
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Quantity -->
-                    <div class="row p-2">
-                        <div class="col-12">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text">Quantity</span>
-                                <input type="number" class="form-control" name="quantity" value="{{item.quantity}}"
-                                    placeholder="Quantity">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-end p-1">
-                        <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
-                    </div>
+
                 </div>
-                </form>
 
 
 

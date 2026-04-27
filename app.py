@@ -24,15 +24,10 @@ def check_session():
 @app.route("/")
 def default():
 	return redirect(url_for("login"))
-	
-@app.route("/test")
-def test():
-	return "<h1>TEST</h1>"
 
 @app.route("/login")
 def login():
-	username = "testing"
-	return render_template("log-in.html", name=username)
+	return render_template("log-in.html")
 
 @app.route("/log-out", methods=["POST"])
 def log_out():
@@ -65,7 +60,7 @@ def create_user_submit():
 	password = request.form.get("password")
 	clearance = request.form.get("clearance")
 	hashed_pass = generate_password_hash(password)
-	db.add_user(username, hashed_pass, clearance)
+	db.add_user(session["userID"], username, hashed_pass, clearance)
 	return redirect(url_for("user_account"))
 
 @app.route("/edit-user-submit", methods=["POST"])
@@ -73,12 +68,12 @@ def edit_user_submit():
     username = request.form.get("username")
     user_ID = db.get_user_info("username")
     password = request.form.get("password")
-    db.change_password("user_ID", generate_password_hash(request.form.get("password")))
+    db.change_password(session["userID"], "user_ID", generate_password_hash(request.form.get("password")))
     return redirect(url_for("user_account"))
 
 @app.route("/change-password", methods=["POST"])
 def change_password():
-	db.change_password(session["userID"], generate_password_hash(request.form.get("password")))
+	db.change_password(session["userID"], session["userID"], generate_password_hash(request.form.get("password")))
 	return redirect(url_for("user_account"))
 
 @app.route("/inventory")
@@ -116,19 +111,19 @@ def submit_item():
 	imageFile = request.files['imageFile']
 	imagePath = "images/" + name + Path(imageFile.filename).suffix
 	imageFile.save(imagePath)
-	db.add_item(name, price, amount, desc, lowCount, imagePath)
+	db.add_item(session["userID"], name, price, amount, desc, lowCount, imagePath)
 	return redirect(url_for("inventory"))
 
 @app.route("/submit-tag", methods=["POST"])
 def submit_tag():
 	name = request.form.get("name") or ""
 	tags = request.form.getlist("tags") or []
-	db.make_tag(name)
+	db.make_tag(session["userID"], name)
 	productID = request.form.get("productID")
 	for tagID in tags:
-		db.apply_tag(productID, tagID)
+		db.apply_tag(session["userID"], productID, tagID)
 	row = db.get_tag_by_name(name)[0]
-	db.apply_tag(productID, row["tagID"])
+	db.apply_tag(session["userID"], productID, row["tagID"])
 	if not name:
 		return "FAIL"
 	return redirect(url_for("inventory"))
@@ -144,14 +139,14 @@ def edit_item():
 	productID = request.form.get("productID")
 	price = request.form.get("price")
 	quantity = request.form.get("quantity")
-	db.edit_item(productID, name, desc, price, quantity)
+	db.edit_item(session["userID"], productID, name, desc, price, quantity)
 	return redirect(url_for("inventory"))
     
 @app.route("/remove-tag", methods=["POST"])
 def remove_tag():
     productID = request.form.get("productID")
     tagID = request.form.get("tagID")
-    db.remove_tag(productID, tagID)
+    db.remove_tag(session["userID"], productID, tagID)
     return redirect(url_for("inventory"))
 
 
@@ -164,6 +159,10 @@ def submit_search():
 		url += "&tags=" + tag
 	return redirect(url)
 
+@app.route("/audit-log")
+def audit_log():
+    logs = db.get_logs()
+    return render_template("audit-log.html", logs=logs)
 
 if __name__ == "__main__":
     app.run(debug=True)
