@@ -102,6 +102,7 @@ def submit_item():
 	name = request.form.get("name")
 	price = request.form.get("price")
 	amount = request.form.get("amount")
+	quantity = request.form.get("quantity")
 	desc = request.form.get("desc")
 	lowCount = request.form.get("lowCount")
 	imageFile = request.files['imageFile']
@@ -133,7 +134,9 @@ def edit_item():
 	name = request.form.get("name")
 	desc = request.form.get("description")
 	productID = request.form.get("productID")
-	db.edit_item(productID, name, desc)
+	price = request.form.get("price")
+	quantity = request.form.get("quantity")
+	db.edit_item(productID, name, desc, price, quantity)
 	return redirect(url_for("inventory"))
     
 @app.route("/remove-tag", methods=["POST"])
