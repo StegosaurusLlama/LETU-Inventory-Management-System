@@ -28,6 +28,8 @@
                 </div>
                 <p>Item #: {{item.productID}}</p>
                 <p>Price: ${{item.price}}</p>
+                <p>Quantity: {{item.quantity}}</p>
+                <p>Low Threshold: {{item.lowThreshhold}}</p>
                 <p class="w-100 overflow-auto" style="max-height: 60px;">Description: {{item.description}}</p>
             </div>
             {% if session['clearance'] == 3 %}
@@ -109,7 +111,6 @@
                                         </div>
                                     </div>
                                 </div>
-
                                 <!-- Quantity -->
                                 <div class="row p-2">
                                     <div class="col-12">
@@ -120,7 +121,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                
                                 <div class="d-flex justify-content-end p-1">
                                     <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
                                 </div>
