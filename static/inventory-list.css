@@ -13,8 +13,10 @@
 
 /* inventory list */
 .item-card {
-        margin: 0px min(15%, 300px);
+        margin-right: min(15%, 300px);
+        margin-top: 10px;
         padding: 20px;
+        border-top: 1px solid #000000;
         border-bottom: 1px solid #000000;
         border-left: 1px solid #000000;
         border-right: 1px solid #000000;
