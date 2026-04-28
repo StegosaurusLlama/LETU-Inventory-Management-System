@@ -36,7 +36,7 @@
                 </div>
             </div>
             {% for log in logs %}
-            <div class="row g-0">
+            <div class="row g-0 text-wrap">
                 <div class="border border-dark col text-center p-1">
                     <p>{{log.changeTime}}</p>
                 </div>
@@ -46,8 +46,8 @@
                 <div class="border border-dark col text-center p-1">
                     <p>{{log.actionTaken}}</p>
                 </div>
-                <div class="border border-dark col text-center p-1">
-                    <p class="text-nowrap">{{log.effectiveChange}}</p>
+                <div class="border border-dark col text-center overflow-auto p-1">
+                    <p>{{log.effectiveChange}}</p>
                 </div>
                 <div class="border border-dark col text-center p-1">
                     <p>{{log.changeQuantity}}</p>
