@@ -86,6 +86,7 @@ def inventory():
 		search = ""
 	if not search_tags:
 		search_tags = []
+	print(search_tags)
 	rows = db.search_items(search, search_tags)
 	tags = db.get_tags()
 	if not rows:
@@ -99,7 +100,7 @@ def inventory():
 		else:
 			r["color"] = "#E44242"	
 			
-	return render_template("inventory-page.html", items=rows, search=search, tags=tags)
+	return render_template("inventory-page.html", items=rows, search=search, searchTags=search_tags, tags=tags)
 
 @app.route("/submit-item", methods=["POST"])
 def submit_item():
@@ -130,18 +131,27 @@ def submit_stock():
 	db.edit_item_stock(session["userID"], productID, stock)
 	return jsonify({"productID": productID, "stocked": stocked})
 
-@app.route("/submit-tag", methods=["POST"])
-def submit_tag():
+@app.route("/create-tag", methods=["POST"])
+def create_tag():
 	name = request.form.get("name") or ""
-	tags = request.form.getlist("tags") or []
 	db.make_tag(session["userID"], name)
+	productID = request.form.get("productID")
+	row = db.get_tag_by_name(name)[0]
+	db.apply_tag(session["userID"], productID, row["tagID"])
+	return redirect(url_for("inventory"))
+
+@app.route("/delete-tag", methods=["POST"])
+def delete_tag():
+	name = request.form.get("name") or ""
+	db.delete_tag(session["userID"], name)
+	return redirect(url_for("inventory"))
+
+@app.route("/submit-tags", methods=["POST"])
+def submit_tag():
+	tags = request.form.getlist("tags") or []
 	productID = request.form.get("productID")
 	for tagID in tags:
 		db.apply_tag(session["userID"], productID, tagID)
-	row = db.get_tag_by_name(name)[0]
-	db.apply_tag(session["userID"], productID, row["tagID"])
-	if not name:
-		return "FAIL"
 	return redirect(url_for("inventory"))
 
 @app.route("/images/<filename>")

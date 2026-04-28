@@ -91,10 +91,10 @@ class db_access:
         args = (tagname,)
         return self._edit_data(userID, "Created tag", tagname, query, args)
 
-    def delete_tag(self, userID, tagID):
-        query = "DELETE FROM Tag WHERE tagID = ?"
-        args = (tagID,)
-        return self._edit_data(userID, "Deleted tag", tagID, query, args)
+    def delete_tag(self, userID, tagname):
+        query = "DELETE FROM Tag WHERE name = ?"
+        args = (tagname,)
+        return self._edit_data(userID, "Deleted tag", tagname, query, args)
     
     def apply_tag(self, userID, productID, tagID):
         query = "INSERT INTO ProductTag (productID, tagID) VALUES (?,?)"

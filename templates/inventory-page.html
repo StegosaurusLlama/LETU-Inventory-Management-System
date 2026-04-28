@@ -16,8 +16,8 @@
     {% include 'include/head-navbar.html' %}
 
     {% for item in items %}
-    <div class="item-card container rounded" style="background: #EEE">
-        <div class="d-flex">
+    <div class="item-card container rounded pb-2" style="background: #EEE">
+        <div class="d-flex flex-grow-0 ">
             <div class="d-flex flex-column flex-grow-1">
                 <div class="d-flex w-100 flex-grow-1 mb-1 p-1 rounded" style="background:#FFFFFF">
                     <div class="m-1 text-center">
@@ -54,13 +54,29 @@
                                 {{item.description}}</p>
                         </div>
                     </div>
+                    <div class="d-flex flex-column ms-auto text-nowrap">
+                        {% if session['clearance'] >= 2 %}
+                        <div class="m-1">
+                            <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal"
+                                data-bs-target="#stock-modal-{{item.productID}}">Update
+                                Stock</button>
+                        </div>
+                        {% endif %}
+                        {% if session['clearance'] == 3 %}
+                        <div class="m-1">
+                            <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal"
+                                data-bs-target="#item-modal-{{item.productID}}">Edit Item
+                                ✎</button>
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
-                <div class="w-100 d-flex text-nowrap align-items-center">
+                <div class="d-flex align-items-center overflow-hidden">
                     {% if session['clearance'] == 3 %}
                     <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
                         data-bs-target="#tag-modal-{{item.productID}}">Edit Tags ✎</button>
                     {% endif %}
-                    <div class="tag-list overflow-auto ">
+                    <div class="tag-list overflow-auto flex-grow-1" style="min-width: 0;">
                         {% for tag in item.tags %}
                         <div class="tag d-flex align-items-center px-1 m-1" style="background: #FFFFFF">
                             <p class="m-1">{{tag.name}}</p>
@@ -77,22 +93,7 @@
 
                 </div>
             </div>
-            <div class="d-flex flex-column ms-auto">
-                {% if session['clearance'] >= 2 %}
-                <div class="m-1">
-                    <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal"
-                        data-bs-target="#stock-modal-{{item.productID}}">Update
-                        Stock</button>
-                </div>
-                {% endif %}
-                {% if session['clearance'] == 3 %}
-                <div class="m-1">
-                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal"
-                        data-bs-target="#item-modal-{{item.productID}}">Edit Item
-                        ✎</button>
-                </div>
-                {% endif %}
-            </div>
+
         </div>
         {% if session['clearance'] == 3 %}
         <div class="modal fade" id="item-modal-{{item.productID}}">
@@ -179,33 +180,52 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h6 class="modal-title">Enter tag name:</h6>
+                    <div class="modal-header justify-content-center m-1 p-2">
+                        <h6 class="modal-title ">Edit tags:</h6>
                     </div>
 
                     <!-- Modal body -->
-                    <div class="modal-body">
-                        <form class="edit-tag-form" action="submit-tag" method="POST">
-                            <div class="dropdown" onclick="event.stopPropagation()">
-                                <button type="button" class="btn btn-primary col-auto" data-bs-toggle="dropdown"
-                                    data-bs-target="#tag-filter-modal">Filter</button>
-                                <div class="dropdown-menu">
-                                    <p class="text-center">Select tags:</p>
-                                    <div class="d-flex flex-column m-2">
-                                        {% for tag in tags %}
-                                        <label class=" border rounded m-1">
+                    <div class="modal-body pt-1">
+                        <div class="container m-0 p-0">
+                            <form method="POST" class="row m-1">
+                                <div class="col-3 justify-content-center">
+                                    <button class="btn btn-primary text-nowrap p-1" type="submit"
+                                        formaction="create-tag">Create
+                                        tag</button>
+                                </div>
+                                <div class="col-6 justify-content-center">
+                                    <input class="form-control border-dark" type="text" placeholder="Enter tag name"
+                                        name="name">
+                                </div>
+                                <div class="col-3 justify-content-center">
+                                    <button class="btn btn-danger text-nowrap p-1" type="submit"
+                                        formaction="delete-tag">Delete
+                                        tag</button>
+                                </div>
+                            </form>
+                        </div>
+                        <form action="submit-tags" method="POST">
+                            <p class="text-center">Add tags:</p>
+                            <div class="container m-2">
+                                {% for tag in tags | reject('in', item.tags)%}
+                                {% if loop.index0 % 3 == 0 %}
+                                <div class="row w-100 p-0">
+                                    {% endif %}
+                                    <div class="col-4 p-1">
+                                        <label class="w-100 border border-dark rounded">
                                             <input type="checkbox" class="form-check-input m-1" name="tags"
                                                 value="{{tag.tagID}}">
-                                            <label class="form-check-label flex-fill">{{tag.name}}</label>
+                                            <span class="form-check-label flex-fill text-truncate">{{tag.name}}</span>
                                         </label>
-                                        {% endfor %}
                                     </div>
+                                    {% if loop.index0 % 3 == 2 or loop.last %}
                                 </div>
+                                {% endif %}
+                                {% endfor %}
                             </div>
-                            <input type="text" placeholder="name" name="name">
                             <input type="hidden" name="productID" value="{{item.productID}}">
-                            <div class="d-flex justify-content-end p-1">
-                                <input type="submit" class="btn btn-primary" value="Submit">
+                            <div class="d-flex justify-content-center p-1">
+                                <input type="submit" class="btn btn-primary" value="Apply">
                             </div>
                         </form>
                     </div>

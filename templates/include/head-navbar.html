@@ -23,12 +23,12 @@
                     <button type="button" class="btn text-nowrap btn-primary dropdown-toggle"
                         data-bs-toggle="dropdown">Filter</button>
                     <div class=" dropdown-menu">
-                        <p class="text-center">Select tags:</p>
+                        <p class="text-center m-0">Select tags:</p>
                         <div class="d-flex flex-column m-2">
                             {% for tag in tags %}
                             <label class=" border rounded m-1">
                                 <input type="checkbox" form="search-form" class="form-check-input m-1" name="tags"
-                                    value="{{tag.tagID}}">
+                                    value="{{tag.tagID}}" {% if tag.tagID | string in searchTags %}checked{% endif %}>
                                 <span class="flex-fill">{{tag.name}}</span>
                             </label>
                             {% endfor %}
