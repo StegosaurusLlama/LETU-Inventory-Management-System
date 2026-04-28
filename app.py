@@ -16,6 +16,7 @@ app.config.update(
     SESSION_COOKIE_SAMESITE='Strict' 
 )
 
+
 @app.before_request
 def check_session():
 	if "clearance" not in session and request.endpoint not in ["login", "login_attempt"]:
@@ -114,6 +115,21 @@ def submit_item():
 	db.add_item(session["userID"], name, price, amount, desc, lowCount, imagePath)
 	return redirect(url_for("inventory"))
 
+@app.route("/submit-edit-stock", methods=["POST"])
+def submit_stock():
+	stock = int(request.form.get("quantity"))
+	productID = request.form.get("productID")
+	lowThreshhold = int(request.form.get("lowThreshhold"))
+	
+	if stock == 0:
+		stocked = 0
+	elif stock <= lowThreshhold:
+		stocked = 1
+	else:
+		stocked = 2
+	db.edit_item_stock(session["userID"], productID, stock)
+	return jsonify({"productID": productID, "stocked": stocked})
+
 @app.route("/submit-tag", methods=["POST"])
 def submit_tag():
 	name = request.form.get("name") or ""
@@ -140,7 +156,7 @@ def edit_item():
 	price = request.form.get("price")
 	quantity = request.form.get("quantity")
 	db.edit_item(session["userID"], productID, name, desc, price, quantity)
-	return redirect(url_for("inventory"))
+	return jsonify({"productID":productID, "name":name, "desc":desc, "price":price, "quantity":quantity})
     
 @app.route("/remove-tag", methods=["POST"])
 def remove_tag():

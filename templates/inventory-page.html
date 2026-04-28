@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='inventory-list.css') }}">
     <link href="https://cdn.jsdelivr.net.cn/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="icon" href="{{ url_for('static', filename='box.ico') }}">
 </head>
 
 <body>
@@ -16,59 +17,84 @@
 
     {% for item in items %}
     <div class="item-card container rounded" style="background: #EEE">
-        <div class="d-flex w-100 m-1">
-            <div class="m-1">
-                <div class="p-2 rounded d-flex align-items-center justify-content-center"
-                    style="background-color: {{item.color}}; width: 120px; height: 120px; flex-shrink: 0;">
-                    <img src="{{item.image}}" alt="No Image Found"
-                        style="max-width: 100%; max-height: 100%; object-fit: contain; display: block;">
+        <div class="d-flex">
+            <div class="d-flex flex-column flex-grow-1">
+                <div class="d-flex w-100 flex-grow-1 mb-1 p-1 rounded" style="background:#FFFFFF">
+                    <div class="m-1 text-center">
+                        <div id="stock-backdrop-{{item.productID}}"
+                            class="p-2 rounded d-flex align-items-center justify-content-center"
+                            style="background-color: {{item.color}}; width: 120px; height: 120px; flex-shrink: 0;">
+                            <img src="{{item.image}}" alt="No Image Found" class="w-100 h-100 object-fit-cover"
+                                style="max-width: 100%; max-height: 100%; object-fit: contain; display: block;">
+                        </div>
+                        {% if item.color == "#FFAA0C" %}
+                        <h6 id="stock-{{item.productID}}" class="mb-0" style="color: #FFAA0C">Stock low</h5>
+                            {% elif item.color == "#E44242" %}
+                            <h6 id="stock-{{item.productID}}" class="mb-0" style="color: #E44242">Out of stock</h6>
+                            {% else %}
+                            <h6 id="stock-{{item.productID}}" class="mb-0" style="color: #ffffff"></h6>
+                            {% endif %}
+                    </div>
+                    <div class="flex-grow-1 item-info w-100 rounded m-1">
+                        <div class="d-flex gap-1 align-items-start mx-2 flex-grow-0 flex-shrink-1">
+                            <h2 id="name-{{item.productID}}" class="mb-0">{{item.name}}</h2>
+                        </div>
+                        <div class="d-flex gap-1 align-items-start mx-2">
+                            <label class="form-label mb-0">ID # :</label>
+                            <p id="productID-{{item.productID}} " class="mb-0">{{item.productID}}</p>
+                        </div>
+                        <div class="d-flex gap align-items-star  mx-2">
+                            <label class="form-label mb-0">Price: $</label>
+                            <p id="price-{{item.productID}}" class="mb-0">{{item.price}}</p>
+                        </div>
+                        <div class="d-flex gap-1 align-items-start  mx-2">
+                            <label class="form-label mb-0">Desc: </label>
+                            <p class="w-100 overflow-auto mb-0" style="max-height: 60px;"
+                                id="description-{{item.productID}}">
+                                {{item.description}}</p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="flex-grow-1 item-info w-100">
-                <h2 id="name-{{item.productID}}">{{item.name}}</h2>
-                <div id="attributes-{item.productID}" quantity="{{item.quantity}}"
-                    low-threshhold="{{item.lowThreshhold}}">
-                </div>
-                <p>Item #: {{item.productID}}</p>
-                <p>Price: ${{item.price}}</p>
-                <p>Quantity: {{item.quantity}}</p>
-                <p>Low Threshold: {{item.lowThreshhold}}</p>
-                <p class="w-100 overflow-auto" style="max-height: 60px;">Description: {{item.description}}</p>
-            </div>
-            {% if session['clearance'] == 3 %}
-            <div class="align-items-center d-flex justify-content-end">
-                <button type="button" class="edit-item-btn btn btn-outline-primary rounded-circle"
-                    data-bs-toggle="modal" data-bs-target="#item-modal-{{item.productID}}">✎</button>
-            </div>
-            {% endif %}
-        </div>
-        <div class="w-100 d-flex text-nowrap align-items-center">
-            {% if session['clearance'] == 3 %}
-            <button type="button" class="btn btn-outline-primary btn-sm" data-bs-toggle="modal"
-                data-bs-target="#tag-modal-{{item.productID}}">Edit Tags</button>
-            {% endif %}
-            <div class="tag-list overflow-auto ">
-                {% for tag in item.tags %}
-                <div class="tag d-flex align-items-center px-1 m-1" style="background: #FFFFFF">
-                    <p class="m-1">{{tag.name}}</p>
-                    {% if session.clearance == 3 %}
-                    <form action="remove-tag" method="POST">
-                        <input type="hidden" value="{{tag.tagID}}" name="tagID">
-                        <input type="hidden" value="{{item.productID}}" name="productID">
-                        <input type="submit" class="btn-sm btn-close" value="">
-                    </form>
+                <div class="w-100 d-flex text-nowrap align-items-center">
+                    {% if session['clearance'] == 3 %}
+                    <button type="button" class="btn btn-warning btn-sm" data-bs-toggle="modal"
+                        data-bs-target="#tag-modal-{{item.productID}}">Edit Tags ✎</button>
                     {% endif %}
+                    <div class="tag-list overflow-auto ">
+                        {% for tag in item.tags %}
+                        <div class="tag d-flex align-items-center px-1 m-1" style="background: #FFFFFF">
+                            <p class="m-1">{{tag.name}}</p>
+                            {% if session.clearance == 3 %}
+                            <form action="remove-tag" method="POST">
+                                <input type="hidden" value="{{tag.tagID}}" name="tagID">
+                                <input type="hidden" value="{{item.productID}}" name="productID">
+                                <input type="submit" class="btn-sm btn-close" value="">
+                            </form>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+
                 </div>
-                {% endfor %}
+            </div>
+            <div class="d-flex flex-column ms-auto">
+                {% if session['clearance'] >= 2 %}
+                <div class="m-1">
+                    <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal"
+                        data-bs-target="#stock-modal-{{item.productID}}">Update
+                        Stock</button>
+                </div>
+                {% endif %}
+                {% if session['clearance'] == 3 %}
+                <div class="m-1">
+                    <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal"
+                        data-bs-target="#item-modal-{{item.productID}}">Edit Item
+                        ✎</button>
+                </div>
+                {% endif %}
             </div>
         </div>
         {% if session['clearance'] == 3 %}
-        <!-- <div class="edit-btn" onclick="editItem({{item.productID}})">✎</div> -->
-        <!-- <div class="note">Note: Only roles that can edit items and such see this button</div> -->
-
-
-
-
         <div class="modal fade" id="item-modal-{{item.productID}}">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-dialog">
@@ -81,7 +107,7 @@
                         </div>
 
                         <!-- Modal body -->
-                        <form action="submit-edit-item" method="POST">
+                        <form class="edit-item-form" action="submit-edit-item" method="POST">
                             <input type="hidden" value="{{item.productID}}" name="productID">
                             <div class="container-fluid">
                                 <div class="row p-2">
@@ -159,7 +185,7 @@
 
                     <!-- Modal body -->
                     <div class="modal-body">
-                        <form action="submit-tag" method="POST">
+                        <form class="edit-tag-form" action="submit-tag" method="POST">
                             <div class="dropdown" onclick="event.stopPropagation()">
                                 <button type="button" class="btn btn-primary col-auto" data-bs-toggle="dropdown"
                                     data-bs-target="#tag-filter-modal">Filter</button>
@@ -174,7 +200,6 @@
                                         </label>
                                         {% endfor %}
                                     </div>
-
                                 </div>
                             </div>
                             <input type="text" placeholder="name" name="name">
@@ -184,24 +209,71 @@
                             </div>
                         </form>
                     </div>
-
-                </div>
-
-
-
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
-    </div>
-    {% endif %}
+        {% endif %}
+        {% if session['clearance'] >= 2 %}
+        <div class="modal fade" id="stock-modal-{{item.productID}}">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+
+                        <!-- Modal Header -->
+                        <div class="modal-header">
+                            <h6 class="modal-title">Edit Stock:</h6>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <!-- Modal body -->
+                        <form class="edit-stock-form" action="submit-edit-stock" method="POST">
+                            <input type="hidden" value="{{item.productID}}" name="productID">
+                            <div class="container-fluid">
+                                <input type="hidden" name="productID" value="{{item.productID}}">
+                                <input type="hidden" name="lowThreshhold" value="{{item.lowThreshhold}}">
+                                <!-- Quantity -->
+                                <div class="row p-2">
+                                    <div class="col-12">
+                                        <div class="input-group mb-0">
+                                            <span class="input-group-text">Quantity</span>
+                                            <input type="number" class="form-control" name="quantity"
+                                                value="{{item.quantity}}" placeholder="Quantity" min="0" step="1">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="d-flex justify-content-center p-1">
+                                    <button type="submit" class="btn btn-primary" value="Submit">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+
+
+
+
+                        <!-- Modal footer -->
+                        <!-- <div class="modal-footer"> -->
+                        <!-- <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button> -->
+                        <!-- </div> -->
+
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        {% endif %}
+
     </div>
     {% endfor %}
     {% if not items %}
-    <p>Nothing found.</p>
+    <div class="w-100 text-center my-5">
+        <p class="text-muted">No results</p>
+    </div>
+    {% else %}
+    <div class="w-100 text-center my-5">
+        <p class="text-muted">End of listing</p>
+    </div>
     {% endif %}
     <script src="{{ url_for('static', filename='inventory-script.js') }}"></script>
     <script src="https://cdn.jsdelivr.net.cn/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

@@ -9,45 +9,47 @@
 
     <link href="https://cdn.jsdelivr.net.cn/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="icon" href="{{ url_for('static', filename='box.ico') }}">
+
 </head>
 
 <body>
     {% include 'include/head-navbar.html' %}
-    <h1 class="text-center">Audit Log</h1>
-    <div class="container w-100">
-        <div class="overflow-hidden">
-            <div class="row g-0">
-                <div class="border col text-center p-1">
+    <h3 class="text-center">Audit Log</h3>
+    <div class="container w-100 ">
+        <div class="overflow-hidden border border-dark" style="background: #EEE;">
+            <div class="row g-0" style="background: #CCC;">
+                <div class="border border-dark col text-center p-1">
                     <h6>Timestamp</h6>
                 </div>
-                <div class="border col text-center p-1">
+                <div class="border border-dark col text-center p-1">
                     <h6>User</h6>
                 </div>
-                <div class="border col text-center p-1">
+                <div class="border border-dark col text-center p-1">
                     <h6>Action</h6>
                 </div>
-                <div class="border col text-center p-1">
+                <div class="border border-dark col text-center p-1">
                     <h6 class="text-nowrap">Item Affected</h6>
                 </div>
-                <div class="border col text-center p-1">
+                <div class="border border-dark col text-center p-1">
                     <h6># Items</h6>
                 </div>
             </div>
             {% for log in logs %}
             <div class="row g-0">
-                <div class="border col text-center p-1">
+                <div class="border border-dark col text-center p-1">
                     <p>{{log.changeTime}}</p>
                 </div>
-                <div class="border col text-center p-1">
+                <div class="border border-dark col text-center p-1">
                     <p>{{log.userID}}</p>
                 </div>
-                <div class="border col text-center p-1">
+                <div class="border border-dark col text-center p-1">
                     <p>{{log.actionTaken}}</p>
                 </div>
-                <div class="border col text-center p-1">
+                <div class="border border-dark col text-center p-1">
                     <p class="text-nowrap">{{log.effectiveChange}}</p>
                 </div>
-                <div class="border col text-center p-1">
+                <div class="border border-dark col text-center p-1">
                     <p>{{log.changeQuantity}}</p>
                 </div>
             </div>

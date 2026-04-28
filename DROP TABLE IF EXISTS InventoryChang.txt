@@ -17,8 +17,7 @@ CREATE TABLE InventoryChange (
   userID INTEGER NOT NULL,
   actionTaken TEXT NOT NULL,
   effectiveChange TEXT NOT NULL,
-  changeQuantity INTEGER NOT NULL,
-  FOREIGN KEY (userID) REFERENCES Users(userID)
+  changeQuantity INTEGER NOT NULL
 );
 
 CREATE TABLE Tag (

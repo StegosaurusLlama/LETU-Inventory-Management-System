@@ -19,6 +19,75 @@ function closeAddTag() {
     document.getElementById("add-tag").style.display = "none";
 }
 
+document.querySelectorAll(".edit-item-form").forEach(form => {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const res = await fetch(form.action, {
+      method: form.method,
+      body: new FormData(form)
+    });
+
+    const data = await res.json();
+    const desc = document.getElementById("description-" + data["productID"]);
+    desc.textContent = "Description: " + data["desc"];
+    const modal = bootstrap.Modal.getInstance(document.getElementById("item-modal-" + data["productID"]));
+    modal.hide();
+  });
+});
+
+document.querySelectorAll(".edit-stock-form").forEach(form => {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const res = await fetch(form.action, {
+      method: form.method,
+      body: new FormData(form)
+    });
+
+    const data = await res.json();
+    const text = document.getElementById("stock-" + data["productID"])
+    const back = document.getElementById("stock-backdrop-" + data["productID"])
+
+    console.log(data["stocked"])
+    if (data["stocked"] == 0) {
+        text.textContent = "Out of stock"
+        text.style = "color: #E44242"
+        back.style.backgroundColor  = "#E44242"
+    }
+    else if (data["stocked"] == 1) {
+        text.textContent = "Stock low"
+        text.style = "color: #FFAA0C"
+        back.style.backgroundColor  = "#FFAA0C"
+    }
+    else {
+        text.style.display = "none"
+        back.style.backgroundColor  = "#ffffff"
+    }
+    const desc = document.getElementById("description-" + data["productID"]);
+    const modal = bootstrap.Modal.getInstance(document.getElementById("stock-modal-" + data["productID"]));
+    modal.hide();
+  });
+});
+
+document.querySelectorAll(".edit-tag-form").forEach(form => {
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const res = await fetch(form.action, {
+      method: form.method,
+      body: new FormData(form)
+    });
+
+    const data = await res.json();
+    const desc = document.getElementById("description-" + data["productID"]);
+    desc.textContent = "Description: " + data["desc"];
+    const modal = bootstrap.Modal.getInstance(document.getElementById("tag-modal-" + data["productID"]));
+    modal.hide();
+  });
+});
+
+
 window.onclick = function(event) {
     const addItem = this.document.getElementById("add-item")
     const addTag = this.document.getElementById("add-tag")
@@ -29,14 +98,3 @@ window.onclick = function(event) {
         addTag.style.display = "none";
     }
 }
-
-window.addEventListener("beforeunload", function () {
-    localStorage.setItem("scrollY", window.scrollY);
-});
-
-window.addEventListener("load", function () {
-    const scrollY = localStorage.getItem("scrollY");
-    if (scrollY !== null) {
-        window.scrollTo(0, parseInt(scrollY));
-    }
-});

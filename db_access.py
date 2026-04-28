@@ -13,12 +13,13 @@ class db_access:
         return conn
     
     def _edit_data(self, userID, action, affected, query, args=()):
+        username = self.get_userID_info(userID)[0]["username"]
         try:
             with self._connect() as conn:
                 cursor = conn.cursor()
                 cursor.execute(query, args)
                 auditQuery = "INSERT INTO InventoryChange (changeTime, userID, actionTaken, effectiveChange, changeQuantity) VALUES (?,?,?,?,?)"
-                auditArgs = (datetime.now().strftime("%m-%d-%Y %H:%M:%S"), userID, action, affected, 0)  
+                auditArgs = (datetime.now().strftime("%m-%d-%Y %H:%M:%S"), f"{username} (User #{userID})", action, affected, 0)  
                 cursor.execute(auditQuery, auditArgs)
                 return True
         except Exception as e:
@@ -50,6 +51,11 @@ class db_access:
         args = (name, desc, price, quantity, productID)
         return self._edit_data(userID, "Changed item", productID, query, args)
     
+    def edit_item_stock(self, userID, productID, quantity):
+        query = "UPDATE StockItem SET quantity = ? WHERE productID = ?"
+        args = (quantity, productID)
+        return self._edit_data(userID, "Changed stock", productID, query, args)
+    
     # def edit_item_name(self, product_id, name):
     #     query = "UPDATE StockItem SET name = ? WHERE productID = ?"
     #     args = (name, product_id)
@@ -70,6 +76,11 @@ class db_access:
         args = (username,)
         return self._get_data(query, args)
     
+    def get_userID_info(self, userID):
+        query = "SELECT * FROM Users WHERE userID = ?"
+        args = (userID,)
+        return self._get_data(query, args)
+
     def change_password(self, userID, targetUserID, new_password):
         query = "UPDATE Users SET passwordHash = ? WHERE userID = ?"
         args = (new_password, targetUserID)
@@ -115,10 +126,10 @@ class db_access:
         return self._get_data(query, args)
     
     def search_items(self, search, tags=[]):
-        query = f"SELECT DISTINCT S.* FROM StockItem S {"INNER JOIN ProductTag P ON S.productID = P.productID" if tags else ""} WHERE S.name LIKE ?{f"AND P.tagID IN ({','.join(['?'] * len(tags))})" if tags else ""}"
-        args = (f"%{search}%",) + tuple(tags)
+        query = f"SELECT DISTINCT S.*, (S.name LIKE ?) AS match_score, (S.name LIKE ?) AS match_begin FROM StockItem S {"INNER JOIN ProductTag P ON S.productID = P.productID" if tags else ""} {f"WHERE P.tagID IN ({','.join(['?'] * len(tags))})" if tags else ""} ORDER BY match_begin DESC, match_score DESC, S.name COLLATE NOCASE ASC"
+        args = (f"%{search}%", f"{search}%") + tuple(tags)
         return self._get_data(query, args)
     
     def get_logs(self):
-        query = "SELECT * FROM InventoryChange"
+        query = "SELECT * FROM InventoryChange ORDER BY changeTime DESC"
         return self._get_data(query)
