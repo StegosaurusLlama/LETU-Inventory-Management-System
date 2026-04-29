@@ -15,26 +15,28 @@
 <body>
     {% include 'include/head-navbar.html' %}
     <div class="container d-flex flex-column align-items-center" style="min-height: 80vh; margin-top: 5vh;">
-        <h3 class="text-center mb-4">User Accounts</h3>
+        <h3 class="text-center mb-4">Account Info</h3>
 
         <div class="container mt-2 mb-2" style="max-width: 400px;">
             <div class="input-group mb-3">
-                <span class="input-group-text">Username</span>
+                <span class="input-group-text" style="flex: 0 0 28%;">Username:</span>
                 <div class="form-control">
                     {{ session['username'] }}
                 </div>
             </div>
             <div class="input-group mb-3">
-                <span class="input-group-text">Password</span>
+                <span class="input-group-text" style="flex: 0 0 28%;">Password:</span>
                 <div class="form-control">
                     ********
                 </div>
             </div>
 
-            <button type="button" class="btn btn-outline-primary w-10" data-bs-toggle="modal"
-                data-bs-target="#changePasswordModal">
-                Change Password
-            </button>
+            <div class="d-grid justify-content-center mb-5">
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#changePasswordModal">
+                    Change Password
+                </button>
+            </div>
         </div>
 
         {% if session['clearance'] >= 2 %}
@@ -43,38 +45,100 @@
         <div class="container mt-2" style="max-width: 400px;">
             <form action="/create-user-submit" method="POST">
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Username" aria-label="Username"
-                        aria-describedby="basic-addon1" name="username">
+                    <span class="input-group-text" style="flex: 0 0 28%;">Username:</span>
+                    <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                        name="username">
                 </div>
 
                 <div class="input-group mb-3">
-                    <input type="password" class="form-control" placeholder="Password" aria-label="Recipient’s username"
-                        aria-describedby="basic-addon2" name="password">
+                    <span class="input-group-text" style="flex: 0 0 28%;">Password:</span>
+                    <input type="password" class="form-control" aria-label="Password" aria-describedby="basic-addon2"
+                        name="password">
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" style="flex: 0 0 27%;">Confirm Password:</span>
+                    <input type="password" class="form-control" aria-label="Password" aria-describedby="basic-addon2"
+                        name="confirm">
                 </div>
 
                 <div class="mb-3">
                     <select class="form-select" name="clearance">
-                        <option selected disabled>Select Clearance</option>
+                        <option selected disabled>Select Clearance:</option>
                         <option value="1">Employee</option>
+                        {% if session['clearance'] >=3 %}
                         <option value="2">Manager</option>
                         <option value="3">Admin</option>
+                        {% endif %}
                     </select>
                 </div>
 
-                <div class="d-grid justify-content-center">
+                <div class="d-grid justify-content-center mb-5">
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </div>
             </form>
         </div>
-        <div class="container d-flex flex-column align-items-center" style="min-height: 80vh; margin-top: 5vh;">
+        <hr style="border: 1px solid black;">
+        <h3 class="text-center mb-4">Change Employee Password</h3>
+        <div class="container mt-2" style="max-width: 400px;">
             <div class="container mt-2" style="max-width: 400px;">
                 <form action="/edit-user-submit" method="POST">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" style="flex: 0 0 28%;">Username:</span>
+                        <input type="text" class="form-control" aria-label="Username" aria-describedby="basic-addon1"
+                            name="username">
+                    </div>
 
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" style="flex: 0 0 28%;">Password:</span>
+                        <input type="password" class="form-control" aria-label="Password"
+                            aria-describedby="basic-addon2" name="password">
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" style="flex: 0 0 27%;">Confirm Password:</span>
+                        <input type="password" class="form-control" aria-label="Password"
+                            aria-describedby="basic-addon2" name="confirm">
+                    </div>
+
+                    <div class="d-grid justify-content-center mb-5">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
             </div>
         </div>
         {% endif %}
 
+        {% if session['clearance'] >= 3 %}
+        <hr style="border: 1px solid black;">
+        <h3 class="text-center mb-4">Delete User</h3>
+        <div class="container mt-2" style="max-width: 400px;">
+            <form id="delete-account" action="/delete-user-account" method="POST">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" style="flex: 0 0 41%;">Account to delete:</span>
+                    <input type="text" class="form-control" aria-label="Account to delete"
+                        aria-describedby="basic-addon1" name="username">
+                </div>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text" style="flex: 0 0 41%;">Confirm account:</span>
+                    <input type="text" class="form-control" aria-label="Confirm Account Name"
+                        aria-describedby="basic-addon1" name="confirm">
+                </div>
+
+                <div class="d-grid justify-content-center mb-5">
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal"
+                        data-bs-target="#deleteUserModal">
+                        Delete Account
+                    </button>
+                </div>
+
+            </form>
+        </div>
+        {% endif %}
+
     </div>
+
     <div class="modal fade" id="changePasswordModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -85,14 +149,49 @@
 
                 <div class="modal-body">
                     <form id="change-password-form" action="/change-password" method="POST">
-                        <input type="password" class="form-control" placeholder="Enter new password" name="password">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" style="flex: 0 0 28%;">Password:</span>
+                            <input type="password" class="form-control" aria-label="Password"
+                                aria-describedby="basic-addon2" name="password">
+                        </div>
+
+                        <div class="input-group mb-3">
+                            <span class="input-group-text" style="flex: 0 0 27%;">Confirm Password:</span>
+                            <input type="password" class="form-control" aria-label="Password"
+                                aria-describedby="basic-addon2" name="confirm">
+                        </div>
+                        <!-- <input type="password" class="form-control" placeholder="Enter new password" name="password">
+                        <input type="password" class="form-control" placeholder="Confirm new password" name="confirm"> -->
                     </form>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" type="submit"
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-warning" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary" data-bs-dismiss="modal"
                         form="change-password-form">Save</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteUserModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body text-center">
+                    <p>Are you sure you want to delete account 'name'?</p>
+                    <p>This is a permanent action, and cannot be undone</p>
+                </div>
+
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger" data-bs-dismiss="modal" form="delete-account">Delete
+                        Account</button>
                 </div>
 
             </div>

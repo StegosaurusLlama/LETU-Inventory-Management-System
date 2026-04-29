@@ -59,23 +59,48 @@ def user_account():
 def create_user_submit():
 	username = request.form.get("username")
 	password = request.form.get("password")
+	confirm = request.form.get("confirm")
 	clearance = request.form.get("clearance")
 	hashed_pass = generate_password_hash(password)
-	db.add_user(session["userID"], username, hashed_pass, clearance)
-	return redirect(url_for("user_account"))
+	if password==confirm:
+		db.add_user(session["userID"], username, hashed_pass, clearance)
+		return redirect(url_for("user_account"))
+	else:
+		return redirect(url_for("user_account"))
 
 @app.route("/edit-user-submit", methods=["POST"])
 def edit_user_submit():
+	username = request.form.get("username")
+	user_ID = db.get_user_info(username)[0]["userID"]
+	password = request.form.get("password")
+	confirm = request.form.get("confirm")
+	if password==confirm:
+		db.change_password(session["userID"], user_ID, username, generate_password_hash(password))
+		return redirect(url_for("user_account"))
+	else:
+		return redirect(url_for("user_account"))
+
+@app.route("/delete-user-account", methods=["POST"])
+def delete_user_account():
     username = request.form.get("username")
-    user_ID = db.get_user_info("username")
-    password = request.form.get("password")
-    db.change_password(session["userID"], "user_ID", generate_password_hash(request.form.get("password")))
-    return redirect(url_for("user_account"))
+    confirm = request.form.get("confirm")
+    user_ID = db.get_user_info(username)[0]["userID"]
+    if username==confirm:
+        db.delete_user(session["userID"], user_ID, username)
+        return redirect(url_for("user_account"))
+    else:
+        return redirect(url_for("user_account"))
+    
 
 @app.route("/change-password", methods=["POST"])
 def change_password():
-	db.change_password(session["userID"], session["userID"], generate_password_hash(request.form.get("password")))
-	return redirect(url_for("user_account"))
+    password = request.form.get("password")
+    confirm = request.form.get("confirm")
+    if password==confirm:
+        db.change_password(session["userID"], session["userID"], generate_password_hash(password))
+        return redirect(url_for("user_account"))
+    else:
+        return redirect(url_for("user_accounts"))
 
 @app.route("/inventory")
 def inventory():

@@ -81,10 +81,15 @@ class db_access:
         args = (userID,)
         return self._get_data(query, args)
 
-    def change_password(self, userID, targetUserID, new_password):
+    def change_password(self, userID, targetUserID, targetUsername, new_password):
         query = "UPDATE Users SET passwordHash = ? WHERE userID = ?"
         args = (new_password, targetUserID)
-        return self._edit_data(userID, "Changed password", userID, query, args)
+        return self._edit_data(userID, "Changed password", targetUsername, query, args)
+    
+    def delete_user(self, userID, targetUserID, targetUsername):
+        query = "DELETE FROM Users WHERE userID = ?"
+        args = (targetUserID,)
+        return self._edit_data(userID, "Deleted User", targetUsername, query, args)
     
     def make_tag(self, userID, tagname):
         query = "INSERT INTO Tag (name) VALUES (?)"
