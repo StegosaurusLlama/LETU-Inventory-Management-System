@@ -58,7 +58,7 @@ class db_access:
     
     def delete_item(self, userID, ProductID, productName):
         query = "DELETE FROM StockItem where name = ?"
-        args = (productName)
+        args = (productName,)
         return self._edit_data(userID, "Deleted item", productName, query, args)
 
     def add_user(self, userID, username, hashed_pass, clearance):
