@@ -22,18 +22,22 @@
                 <div class="d-flex w-100 flex-grow-1 mb-1 p-1 rounded" style="background:#FFFFFF">
                     <div class="m-1 text-center">
                         <div id="stock-backdrop-{{item.productID}}"
-                            class="p-2 rounded d-flex align-items-center justify-content-center"
+                            class="p-2 rounded d-flex align-items-center position-relative justify-content-center"
                             style="background-color: {{item.color}}; width: 120px; height: 120px; flex-shrink: 0;">
                             <img src="{{item.image}}" alt="No Image Found" class="w-100 h-100 object-fit-cover"
                                 style="max-width: 100%; max-height: 100%; object-fit: contain; display: block;">
+                            <img src="{{ url_for('static', filename='OutOfStock.png') }}" class="object-fit-cover"
+                                style="max-width: 100%; max-height: 100%; object-fit: contain; display: {% if item.color == '#E44242' %}block{% else %}none{% endif %}; position: absolute;"
+                                id="img-overlay-{{item.productID}}">
+
                         </div>
                         {% if item.color == "#FFAA0C" %}
-                        <h6 id="stock-{{item.productID}}" class="mb-0" style="color: #FFAA0C">Stock low</h5>
-                            {% elif item.color == "#E44242" %}
-                            <h6 id="stock-{{item.productID}}" class="mb-0" style="color: #E44242">Out of stock</h6>
-                            {% else %}
-                            <h6 id="stock-{{item.productID}}" class="mb-0" style="color: #ffffff"></h6>
-                            {% endif %}
+                        <h6 id="stock-{{item.productID}}" class="mb-0" style="color: #FFAA0C">Stock low</h6>
+                        {% elif item.color == "#E44242" %}
+                        <h6 id="stock-{{item.productID}}" class="mb-0" style="color: #E44242">Out of stock</h6>
+                        {% else %}
+                        <h6 id="stock-{{item.productID}}" class="mb-0" style="color: #ffffff"></h6>
+                        {% endif %}
                     </div>
                     <div class="flex-grow-1 item-info w-100 rounded m-1">
                         <div class="d-flex gap-1 align-items-start mx-2 flex-grow-0 flex-shrink-1">
@@ -45,7 +49,7 @@
                         </div>
                         <div class="d-flex gap align-items-star  mx-2">
                             <label class="form-label mb-0">Price: $</label>
-                            <p id="price-{{item.productID}}" class="mb-0">{{item.price}}</p>
+                            <p id="price-{{item.productID}}" class="mb-0">{{"%.2f" % item.price}}</p>
                         </div>
                         <div class="d-flex gap-1 align-items-start  mx-2">
                             <label class="form-label mb-0">Desc: </label>
@@ -156,7 +160,7 @@
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">Quantity</span>
                                             <input type="number" class="form-control" name="quantity"
-                                                value="{{item.quantity}}" placeholder="Quantity">
+                                                value="{{item.quantity}}" placeholder="Quantity" id="quantity-field-{{item.productID}}">
                                         </div>
                                     </div>
                                 </div>
@@ -171,15 +175,6 @@
                                 </div>
                             </div>
                         </form>
-
-
-
-
-                        <!-- Modal footer -->
-                        <!-- <div class="modal-footer"> -->
-                        <!-- <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button> -->
-                        <!-- </div> -->
-
                     </div>
                 </div>
             </div>
@@ -282,15 +277,6 @@
                                 </div>
                             </div>
                         </form>
-
-
-
-
-                        <!-- Modal footer -->
-                        <!-- <div class="modal-footer"> -->
-                        <!-- <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button> -->
-                        <!-- </div> -->
-
                     </div>
                 </div>
             </div>
