@@ -85,6 +85,8 @@ def delete_user_account():
     username = request.form.get("username")
     confirm = request.form.get("confirm")
     user_ID = db.get_user_info(username)[0]["userID"]
+    if user_ID == session["userID"]:
+        return redirect(url_for("user_account"))
     if username==confirm:
         db.delete_user(session["userID"], user_ID, username)
         return redirect(url_for("user_account"))
