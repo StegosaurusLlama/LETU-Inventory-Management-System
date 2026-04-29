@@ -46,15 +46,20 @@ class db_access:
         query = "SELECT * FROM StockItem"
         return self._get_data(query)
     
-    def edit_item(self, userID, productID, name, desc, price, quantity):
-        query = "UPDATE StockItem SET name = ?, description = ?, price = ?, quantity = ? WHERE productID = ?"
-        args = (name, desc, price, quantity, productID)
+    def edit_item(self, userID, productID, name, desc, price, quantity, lowThreshhold, imgPath):
+        query = f"UPDATE StockItem SET name = ?, description = ?, price = ?, quantity = ?, lowThreshhold = ?{', image = ?' if imgPath else ""} WHERE productID = ?"
+        args = (name, desc, price, quantity, lowThreshhold) + ((imgPath, productID) if imgPath else (productID,))
         return self._edit_data(userID, "Changed item", name, query, args)
     
     def edit_item_stock(self, userID, productID, name, quantity):
         query = "UPDATE StockItem SET quantity = ? WHERE productID = ?"
         args = (quantity, productID)
         return self._edit_data(userID, "Changed stock", name, query, args, quantity)
+    
+    def delete_item(self, userID, ProductID, productName):
+        query = "DELETE FROM StockItem where name = ?"
+        args = (productName,)
+        return self._edit_data(userID, "Deleted item", productName, query, args)
 
     def add_user(self, userID, username, hashed_pass, clearance):
         query = "INSERT INTO Users (username, passwordHash, clearance) VALUES (?,?,?)"

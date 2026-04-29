@@ -85,6 +85,8 @@ def delete_user_account():
     username = request.form.get("username")
     confirm = request.form.get("confirm")
     user_ID = db.get_user_info(username)[0]["userID"]
+    if user_ID == session["userID"]:
+        return redirect(url_for("user_account"))
     if username==confirm:
         db.delete_user(session["userID"], user_ID, username)
         return redirect(url_for("user_account"))
@@ -141,6 +143,13 @@ def submit_item():
 	db.add_item(session["userID"], name, price, amount, desc, lowCount, imagePath)
 	return redirect(url_for("inventory"))
 
+@app.route("/delete-item", methods=["POST"])
+def delete_item():
+    name = request.form.get("name")
+    pID = request.form.get("productID")
+    db.delete_item(session["userID"], pID, name)
+    return redirect(url_for("inventory"))
+
 @app.route("/submit-edit-stock", methods=["POST"])
 def submit_stock():
 	stock = int(request.form.get("quantity"))
@@ -188,25 +197,29 @@ def images(filename):
 
 @app.route("/submit-edit-item", methods=["POST"])
 def edit_item():
-    name = request.form.get("name")
-    desc = request.form.get("description")
-    productID = request.form.get("productID")
-    price = request.form.get("price")
-    quantity = request.form.get("quantity")
-    imageFile = request.files.get('imageFile')
-    # if imageFile and imageFile.filename != '':
+	name = request.form.get("name")
+	desc = request.form.get("description")
+	productID = request.form.get("productID")
+	price = request.form.get("price")
+	quantity = request.form.get("quantity")
+	lowThreshhold = request.form.get("lowThreshhold")
+	imageFile = request.files['imageFile']
+	imagePath = None
+	if imageFile and imageFile.filename != '':
+		imagePath = "images/" + name + Path(imageFile.filename).suffix
+		imageFile.save(imagePath)
     #     imagePath = "images/" + name + Path(imageFile.filename).suffix
     #     imageFile.save(imagePath)
     #     db.edit_item(session["userID"], productID, name, desc, price, quantity, imagePath)
     # else:
     #     db.edit_item(session["userID"], productID, name, desc, price, quantity)
     # return redirect(url_for("inventory"))
-    imagePath = None
-    if imageFile and imageFile.filename != '':
-        imagePath = "images/" + name + Path(imageFile.filename).suffix
-        imageFile.save(imagePath)
-    db.edit_item(session["userID"], productID, name, desc, price, quantity, imagePath)
-    return redirect(url_for("inventory"))
+	imagePath = None
+	if imageFile and imageFile.filename != '':
+		imagePath = "images/" + name + Path(imageFile.filename).suffix
+		imageFile.save(imagePath)
+	db.edit_item(session["userID"], productID, name, desc, price, quantity, imagePath)
+	return redirect(url_for("inventory"))
 
 @app.route("/remove-tag", methods=["POST"])
 def remove_tag():

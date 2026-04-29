@@ -19,22 +19,22 @@ function closeAddTag() {
   document.getElementById("add-tag").style.display = "none";
 }
 
-document.querySelectorAll(".edit-item-form").forEach(form => {
-  form.addEventListener("submit", async (e) => {
-    e.preventDefault();
+// document.querySelectorAll(".edit-item-form").forEach(form => {
+//   form.addEventListener("submit", async (e) => {
+//     e.preventDefault();
 
-    const res = await fetch(form.action, {
-      method: form.method,
-      body: new FormData(form)
-    });
+//     const res = await fetch(form.action, {
+//       method: form.method,
+//       body: new FormData(form)
+//     });
 
-    const data = await res.json();
-    const desc = document.getElementById("description-" + data["productID"]);
-    desc.textContent = "Description: " + data["desc"];
-    const modal = bootstrap.Modal.getInstance(document.getElementById("item-modal-" + data["productID"]));
-    modal.hide();
-  });
-});
+//     const data = await res.json();
+//     const desc = document.getElementById("description-" + data["productID"]);
+//     desc.textContent = "Description: " + data["desc"];
+//     const modal = bootstrap.Modal.getInstance(document.getElementById("item-modal-" + data["productID"]));
+//     modal.hide();
+//   });
+// });
 
 document.querySelectorAll(".edit-stock-form").forEach(form => {
   form.addEventListener("submit", async (e) => {
