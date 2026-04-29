@@ -26,19 +26,18 @@
                             style="background-color: {{item.color}}; width: 120px; height: 120px; flex-shrink: 0;">
                             <img src="{{item.image}}" alt="No Image Found" class="w-100 h-100 object-fit-cover"
                                 style="max-width: 100%; max-height: 100%; object-fit: contain; display: block;">
-                            {% if item.color == "#E44242" %}
-                            <img src="{{ url_for('static', filename='OutOfStock.png') }}"
-                                class="object-fit-cover"
-                                style="max-width: 100%; max-height: 100%; object-fit: contain; display: block; position: absolute;">
-                            {% endif %}
+                            <img src="{{ url_for('static', filename='OutOfStock.png') }}" class="object-fit-cover"
+                                style="max-width: 100%; max-height: 100%; object-fit: contain; display: {% if item.color == '#E44242' %}block{% else %}none{% endif %}; position: absolute;"
+                                id="img-overlay-{{item.productID}}">
+
                         </div>
                         {% if item.color == "#FFAA0C" %}
-                        <h6 id="stock-{{item.productID}}" class="mb-0" style="color: #FFAA0C">Stock low</h5>
-                            {% elif item.color == "#E44242" %}
-                            <h6 id="stock-{{item.productID}}" class="mb-0" style="color: #E44242">Out of stock</h6>
-                            {% else %}
-                            <h6 id="stock-{{item.productID}}" class="mb-0" style="color: #ffffff"></h6>
-                            {% endif %}
+                        <h6 id="stock-{{item.productID}}" class="mb-0" style="color: #FFAA0C">Stock low</h6>
+                        {% elif item.color == "#E44242" %}
+                        <h6 id="stock-{{item.productID}}" class="mb-0" style="color: #E44242">Out of stock</h6>
+                        {% else %}
+                        <h6 id="stock-{{item.productID}}" class="mb-0" style="color: #ffffff"></h6>
+                        {% endif %}
                     </div>
                     <div class="flex-grow-1 item-info w-100 rounded m-1">
                         <div class="d-flex gap-1 align-items-start mx-2 flex-grow-0 flex-shrink-1">
@@ -157,7 +156,7 @@
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">Quantity</span>
                                             <input type="number" class="form-control" name="quantity"
-                                                value="{{item.quantity}}" placeholder="Quantity">
+                                                value="{{item.quantity}}" placeholder="Quantity" id="quantity-field-{{item.productID}}">
                                         </div>
                                     </div>
                                 </div>

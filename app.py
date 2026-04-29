@@ -155,7 +155,7 @@ def submit_stock():
 	else:
 		stocked = 2
 	db.edit_item_stock(session["userID"], productID, name, stock)
-	return jsonify({"productID": productID, "stocked": stocked})
+	return jsonify({"productID": productID, "stocked": stocked, "quantity": stock})
 
 @app.route("/create-tag", methods=["POST"])
 def create_tag():
