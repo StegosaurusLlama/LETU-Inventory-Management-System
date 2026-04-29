@@ -118,11 +118,15 @@
                             enctype="multipart/form-data">
                             <input type="hidden" value="{{item.productID}}" name="productID">
                             <div class="container-fluid">
-                                <div class="mb-3">
-                                    <label class="form-label small">Change Image</label>
-                                    <input type="file" class="form-control" accept="image/*" name="imageFile">
+                                <div class="row px-2">
+                                    <div class="col-12">
+                                        <div class="mb-3">
+                                            <label class="form-label small">Change Image</label>
+                                            <input type="file" class="form-control" accept="image/*" name="imageFile">
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="row p-2">
+                                <div class="row px-2">
                                     <div class="col-12">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text"
@@ -133,7 +137,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row p-2">
+                                <div class="row px-2">
                                     <div class="col-12">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text"
@@ -145,7 +149,7 @@
                                     </div>
                                 </div>
                                 <!-- Price -->
-                                <div class="row p-2">
+                                <div class="row px-2">
                                     <div class="col-12">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">$</span>
@@ -156,13 +160,23 @@
                                 </div>
 
                                 <!-- Quantity -->
-                                <div class="row p-2">
+                                <div class="row px-2">
                                     <div class="col-12">
                                         <div class="input-group mb-3">
                                             <span class="input-group-text">Quantity</span>
                                             <input type="number" class="form-control" name="quantity"
                                                 value="{{item.quantity}}" placeholder="Quantity"
                                                 id="quantity-field-{{item.productID}}">
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Low Threshhold -->
+                                <div class="row px-2">
+                                    <div class="col-12">
+                                        <div class="input-group mb-3">
+                                            <span class="input-group-text">Low Threshhold</span>
+                                            <input type="number" class="form-control" name="lowThreshhold"
+                                                value="{{item.quantity}}" placeholder="lowThreshhold">
                                         </div>
                                     </div>
                                 </div>

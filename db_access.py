@@ -46,9 +46,9 @@ class db_access:
         query = "SELECT * FROM StockItem"
         return self._get_data(query)
     
-    def edit_item(self, userID, productID, name, desc, price, quantity):
-        query = "UPDATE StockItem SET name = ?, description = ?, price = ?, quantity = ? WHERE productID = ?"
-        args = (name, desc, price, quantity, productID)
+    def edit_item(self, userID, productID, name, desc, price, quantity, lowThreshhold, imgPath):
+        query = f"UPDATE StockItem SET name = ?, description = ?, price = ?, quantity = ?, lowThreshhold = ?{', image = ?' if imgPath else ""} WHERE productID = ?"
+        args = (name, desc, price, quantity, lowThreshhold) + ((imgPath, productID) if imgPath else (productID,))
         return self._edit_data(userID, "Changed item", name, query, args)
     
     def edit_item_stock(self, userID, productID, name, quantity):
