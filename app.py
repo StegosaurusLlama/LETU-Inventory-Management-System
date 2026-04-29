@@ -85,6 +85,8 @@ def delete_user_account():
     username = request.form.get("username")
     confirm = request.form.get("confirm")
     user_ID = db.get_user_info(username)[0]["userID"]
+    if user_ID == session["userID"]:
+        return redirect(url_for("user_account"))
     if username==confirm:
         db.delete_user(session["userID"], user_ID, username)
         return redirect(url_for("user_account"))
@@ -212,8 +214,11 @@ def edit_item():
     # else:
     #     db.edit_item(session["userID"], productID, name, desc, price, quantity)
     # return redirect(url_for("inventory"))
-	db.edit_item(session["userID"], productID, name, desc, price, quantity, lowThreshhold, imagePath)
-
+	imagePath = None
+	if imageFile and imageFile.filename != '':
+		imagePath = "images/" + name + Path(imageFile.filename).suffix
+		imageFile.save(imagePath)
+	db.edit_item(session["userID"], productID, name, desc, price, quantity, imagePath)
 	return redirect(url_for("inventory"))
 
 @app.route("/remove-tag", methods=["POST"])
