@@ -206,7 +206,6 @@ def edit_item():
         imagePath = "images/" + name + Path(imageFile.filename).suffix
         imageFile.save(imagePath)
     db.edit_item(session["userID"], productID, name, desc, price, quantity, imagePath)
-    
     return redirect(url_for("inventory"))
 
 @app.route("/remove-tag", methods=["POST"])
