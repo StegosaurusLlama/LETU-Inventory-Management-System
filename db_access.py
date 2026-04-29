@@ -55,16 +55,6 @@ class db_access:
         query = "UPDATE StockItem SET quantity = ? WHERE productID = ?"
         args = (quantity, productID)
         return self._edit_data(userID, "Changed stock", name, query, args, quantity)
-    
-    # def edit_item_name(self, product_id, name):
-    #     query = "UPDATE StockItem SET name = ? WHERE productID = ?"
-    #     args = (name, product_id)
-    #     return self._edit_data(query, args)
-    
-    # def edit_item_desc(self, product_id, desc):
-    #     query = "UPDATE StockItem SET description = ? WHERE productID = ?"
-    #     args = (desc, product_id)
-    #     return self._edit_data(query, args)
 
     def add_user(self, userID, username, hashed_pass, clearance):
         query = "INSERT INTO Users (username, passwordHash, clearance) VALUES (?,?,?)"
