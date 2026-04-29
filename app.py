@@ -141,6 +141,13 @@ def submit_item():
 	db.add_item(session["userID"], name, price, amount, desc, lowCount, imagePath)
 	return redirect(url_for("inventory"))
 
+@app.route("/delete-item", methods=["POST"])
+def delete_item():
+    name = request.form.get("name")
+    pID = request.form.get("productID")
+    db.delete_item(session["userID"], pID, name)
+    return redirect(url_for("inventory"))
+
 @app.route("/submit-edit-stock", methods=["POST"])
 def submit_stock():
 	stock = int(request.form.get("quantity"))
