@@ -50,8 +50,10 @@ document.querySelectorAll(".edit-stock-form").forEach(form => {
     const back = document.getElementById("stock-backdrop-" + data["productID"]);
     const overlay = document.getElementById("img-overlay-" + data["productID"]);
     const quantityField = document.getElementById("quantity-field-" + data["productID"]);
-
-    quantityField.value = data["quantity"]
+   
+    if (quantityField) {
+      quantityField.value = data["quantity"]
+    }
 
     if (data["stocked"] == 0) {
       text.textContent = "Out of stock";

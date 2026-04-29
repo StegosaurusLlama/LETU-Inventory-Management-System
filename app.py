@@ -99,7 +99,7 @@ def change_password():
     password = request.form.get("password")
     confirm = request.form.get("confirm")
     if password==confirm:
-        db.change_password(session["userID"], session["userID"], generate_password_hash(password))
+        db.change_password(session["userID"], session["userID"], session["username"], generate_password_hash(password))
         return redirect(url_for("user_account"))
     else:
         return redirect(url_for("user_accounts"))
@@ -172,7 +172,6 @@ def create_tag():
 	db.make_tag(session["userID"], name)
 	productID = request.form.get("productID")
 	row = db.get_tag_by_name(name)[0]
-	db.apply_tag(session["userID"], productID, row["tagID"])
 	return redirect(url_for("inventory"))
 
 @app.route("/delete-tag", methods=["POST"])
@@ -204,12 +203,6 @@ def edit_item():
 	quantity = request.form.get("quantity")
 	lowThreshhold = request.form.get("lowThreshhold")
 	imageFile = request.files['imageFile']
-    #     imagePath = "images/" + name + Path(imageFile.filename).suffix
-    #     imageFile.save(imagePath)
-    #     db.edit_item(session["userID"], productID, name, desc, price, quantity, imagePath)
-    # else:
-    #     db.edit_item(session["userID"], productID, name, desc, price, quantity)
-    # return redirect(url_for("inventory"))
 	imagePath = None
 	if imageFile and imageFile.filename != '':
 		imagePath = "images/" + name + Path(imageFile.filename).suffix
