@@ -16,41 +16,41 @@
 <body>
     {% include 'include/head-navbar.html' %}
     <h3 class="text-center">Audit Log</h3>
-    <div class="container w-100 ">
-        <div class="overflow-hidden border border-dark" style="background: #EEE;">
-            <div class="row g-0" style="background: #CCC;">
-                <div class="border border-dark col text-center p-1">
+    <div class="d-flex w-100 px-5 py-2">
+        <div class="overflow-hidden border border-dark w-100" style="background: #EEE;">
+            <div class="row g-0 overflow-hidden" style="background: #CCC;">
+                <div class="border border-dark col-2 text-center p-1 overflow-auto">
                     <h6>Timestamp</h6>
                 </div>
-                <div class="border border-dark col text-center p-1">
+                <div class="border border-dark col-3 text-center p-1 overflow-auto">
                     <h6>User</h6>
                 </div>
-                <div class="border border-dark col text-center p-1">
+                <div class="border border-dark col-3 text-center p-1 overflow-auto">
                     <h6>Action</h6>
                 </div>
-                <div class="border border-dark col text-center p-1">
-                    <h6 class="text-nowrap">Item Affected</h6>
+                <div class="border border-dark col-3 text-center p-1 overflow-auto">
+                    <h6 class="text-nowrap ">Item Affected</h6>
                 </div>
-                <div class="border border-dark col text-center p-1">
-                    <h6># Items</h6>
+                <div class="border border-dark col-1 text-center p-1 overflow-auto">
+                    <h6 class="text-nowrap ">#</h6>
                 </div>
             </div>
             {% for log in logs %}
-            <div class="row g-0 text-wrap">
-                <div class="border border-dark col text-center p-1">
-                    <p>{{log.changeTime}}</p>
+            <div class="row g-0 text-nowrap">
+                <div class="border border-dark col-2 text-center py-0 px-1 overflow-auto">
+                    <p class="mb-1">{{log.changeTime}}</p>
                 </div>
-                <div class="border border-dark col text-center p-1">
-                    <p>{{log.userID}}</p>
+                <div class="border border-dark col-3 text-center py-0 px-1 overflow-auto">
+                    <p class="mb-1">{{log.userID}}</p>
                 </div>
-                <div class="border border-dark col text-center p-1">
-                    <p>{{log.actionTaken}}</p>
+                <div class="border border-dark col-3 text-center py-0 px-1 overflow-auto">
+                    <p class="mb-1">{{log.actionTaken}}</p>
                 </div>
-                <div class="border border-dark col text-center overflow-auto p-1">
-                    <p>{{log.effectiveChange}}</p>
+                <div class="border border-dark col-3 text-center py-0 px-1 overflow-auto">
+                    <p class="mb-1">{{log.effectiveChange}}</p>
                 </div>
-                <div class="border border-dark col text-center p-1">
-                    <p>{{log.changeQuantity}}</p>
+                <div class="border border-dark col-1 text-center py-0 px-1">
+                    <p class="mb-1">{{log.changeQuantity | default("-", true)}}</p>
                 </div>
             </div>
             {% endfor %}
