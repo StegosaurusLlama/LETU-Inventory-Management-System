@@ -18,7 +18,7 @@
     {% for item in items %}
     <div class="item-card container rounded pb-2" style="background: #EEE">
         <div class="d-flex flex-grow-0">
-            <div class="d-flex flex-column flex-grow-1 overflow-hidden border">
+            <div class="d-flex flex-column flex-grow-1 overflow-hidden">
                 <div class="d-flex w-100 flex-grow-1 mb-1 p-1 rounded" style="background:#FFFFFF">
                     <div class="m-1 text-center">
                         <div id="stock-backdrop-{{item.productID}}"
@@ -83,7 +83,9 @@
                             {% if session.clearance == 3 %}
                             <form action="remove-tag" method="POST">
                                 <input type="hidden" value="{{tag.tagID}}" name="tagID">
+                                <input type="hidden" value="{{tag.name}}" name="tagName">
                                 <input type="hidden" value="{{item.productID}}" name="productID">
+                                <input type="hidden" value="{{item.name}}" name="productName">
                                 <input type="submit" class="btn-sm btn-close" value="">
                             </form>
                             {% endif %}
@@ -215,6 +217,8 @@
                                         <label class="w-100 border border-dark rounded">
                                             <input type="checkbox" class="form-check-input m-1" name="tags"
                                                 value="{{tag.tagID}}">
+                                            <input type="hidden" name="tagName" value="{{tag.name}}">
+
                                             <span class="form-check-label flex-fill text-truncate">{{tag.name}}</span>
                                         </label>
                                     </div>
@@ -224,6 +228,7 @@
                                 {% endfor %}
                             </div>
                             <input type="hidden" name="productID" value="{{item.productID}}">
+                            <input type="hidden" name="productName" value="{{item.name}}">
                             <div class="d-flex justify-content-center p-1">
                                 <input type="submit" class="btn btn-primary" value="Apply">
                             </div>
@@ -250,6 +255,7 @@
                             <input type="hidden" value="{{item.productID}}" name="productID">
                             <div class="container-fluid">
                                 <input type="hidden" name="productID" value="{{item.productID}}">
+                                <input type="hidden" name="name" value="{{item.name}}">
                                 <input type="hidden" name="lowThreshhold" value="{{item.lowThreshhold}}">
                                 <!-- Quantity -->
                                 <div class="row p-2">

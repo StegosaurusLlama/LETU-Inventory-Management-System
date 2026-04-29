@@ -45,7 +45,7 @@ def login_attempt():
 	user = users[0]
 	if check_password_hash(user["passwordHash"], password): #successful login
 		session["userID"] = user["userID"] #user ID
-		session["username"] = user["username"] #user ID
+		session["username"] = user["username"] #username
 		session["clearance"] = user["clearance"]
 		return redirect(url_for("inventory"))
 	else: #failed login
@@ -74,7 +74,7 @@ def edit_user_submit():
 
 @app.route("/change-password", methods=["POST"])
 def change_password():
-	db.change_password(session["userID"], session["userID"], generate_password_hash(request.form.get("password")))
+	db.change_password(session["userID"], session["userID"], session["username"], generate_password_hash(request.form.get("password")))
 	return redirect(url_for("user_account"))
 
 @app.route("/inventory")
@@ -120,6 +120,7 @@ def submit_item():
 def submit_stock():
 	stock = int(request.form.get("quantity"))
 	productID = request.form.get("productID")
+	name = request.form.get("name")
 	lowThreshhold = int(request.form.get("lowThreshhold"))
 	
 	if stock == 0:
@@ -128,7 +129,7 @@ def submit_stock():
 		stocked = 1
 	else:
 		stocked = 2
-	db.edit_item_stock(session["userID"], productID, stock)
+	db.edit_item_stock(session["userID"], productID, name, stock)
 	return jsonify({"productID": productID, "stocked": stocked})
 
 @app.route("/create-tag", methods=["POST"])
@@ -148,10 +149,12 @@ def delete_tag():
 
 @app.route("/submit-tags", methods=["POST"])
 def submit_tag():
-	tags = request.form.getlist("tags") or []
+	tagIDs = request.form.getlist("tags") or []
+	tagNames = request.form.getlist("tagName") or []
 	productID = request.form.get("productID")
-	for tagID in tags:
-		db.apply_tag(session["userID"], productID, tagID)
+	productName = request.form.get("productName")
+	for i in range(len(tagIDs)):
+		db.apply_tag(session["userID"], productID, tagIDs[i], productName, tagNames[i])
 	return redirect(url_for("inventory"))
 
 @app.route("/images/<filename>")
@@ -171,8 +174,10 @@ def edit_item():
 @app.route("/remove-tag", methods=["POST"])
 def remove_tag():
     productID = request.form.get("productID")
+    productName = request.form.get("productName")
     tagID = request.form.get("tagID")
-    db.remove_tag(session["userID"], productID, tagID)
+    tagName = request.form.get("tagName")
+    db.remove_tag(session["userID"], productID, tagID, productName, tagName)
     return redirect(url_for("inventory"))
 
 

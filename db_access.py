@@ -12,14 +12,14 @@ class db_access:
         conn.execute("PRAGMA foreign_keys = ON")
         return conn
     
-    def _edit_data(self, userID, action, affected, query, args=()):
+    def _edit_data(self, userID, action, affected, query, args=(), num=0):
         username = self.get_userID_info(userID)[0]["username"]
         try:
             with self._connect() as conn:
                 cursor = conn.cursor()
                 cursor.execute(query, args)
                 auditQuery = "INSERT INTO InventoryChange (changeTime, userID, actionTaken, effectiveChange, changeQuantity) VALUES (?,?,?,?,?)"
-                auditArgs = (datetime.now().strftime("%m-%d-%Y %H:%M:%S"), f"{username} (User #{userID})", action, affected, 0)  
+                auditArgs = (datetime.now().strftime("%m-%d-%Y %H:%M:%S"), f"{username} (User #{userID})", action, affected, num)  
                 cursor.execute(auditQuery, auditArgs)
                 return True
         except Exception as e:
@@ -49,12 +49,12 @@ class db_access:
     def edit_item(self, userID, productID, name, desc, price, quantity):
         query = "UPDATE StockItem SET name = ?, description = ?, price = ?, quantity = ? WHERE productID = ?"
         args = (name, desc, price, quantity, productID)
-        return self._edit_data(userID, "Changed item", productID, query, args)
+        return self._edit_data(userID, "Changed item", name, query, args)
     
-    def edit_item_stock(self, userID, productID, quantity):
+    def edit_item_stock(self, userID, productID, name, quantity):
         query = "UPDATE StockItem SET quantity = ? WHERE productID = ?"
         args = (quantity, productID)
-        return self._edit_data(userID, "Changed stock", productID, query, args)
+        return self._edit_data(userID, "Changed stock", name, query, args, quantity)
     
     # def edit_item_name(self, product_id, name):
     #     query = "UPDATE StockItem SET name = ? WHERE productID = ?"
@@ -81,10 +81,10 @@ class db_access:
         args = (userID,)
         return self._get_data(query, args)
 
-    def change_password(self, userID, targetUserID, new_password):
+    def change_password(self, userID, targetUserID, username, new_password):
         query = "UPDATE Users SET passwordHash = ? WHERE userID = ?"
         args = (new_password, targetUserID)
-        return self._edit_data(userID, "Changed password", userID, query, args)
+        return self._edit_data(userID, "Changed password", username, query, args)
     
     def make_tag(self, userID, tagname):
         query = "INSERT INTO Tag (name) VALUES (?)"
@@ -96,15 +96,15 @@ class db_access:
         args = (tagname,)
         return self._edit_data(userID, "Deleted tag", tagname, query, args)
     
-    def apply_tag(self, userID, productID, tagID):
+    def apply_tag(self, userID, productID, tagID, productName, tagName):
         query = "INSERT INTO ProductTag (productID, tagID) VALUES (?,?)"
         args = (productID, tagID)
-        return self._edit_data(userID, "Applied tag", tagID, query, args)
+        return self._edit_data(userID, f"Applied tag {tagName}", productName, query, args)
     
-    def remove_tag(self, userID, productID, tagID):
+    def remove_tag(self, userID, productID, tagID, productName, tagName):
         query = "DELETE FROM ProductTag WHERE productID = ? AND tagID = ?"
         args = (productID, tagID)
-        return self._edit_data(userID, "Removed tag", tagID, query, args)
+        return self._edit_data(userID, f"Removed tag {tagName}", productName, query, args)
     
     def get_items_with_tag(self, tagID):
         query = "SELECT S.* FROM ProductTag P INNER JOIN StockItem S ON P.productID = S.productID WHERE P.tagID = ?"
