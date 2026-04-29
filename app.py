@@ -204,10 +204,6 @@ def edit_item():
 	quantity = request.form.get("quantity")
 	lowThreshhold = request.form.get("lowThreshhold")
 	imageFile = request.files['imageFile']
-	imagePath = None
-	if imageFile and imageFile.filename != '':
-		imagePath = "images/" + name + Path(imageFile.filename).suffix
-		imageFile.save(imagePath)
     #     imagePath = "images/" + name + Path(imageFile.filename).suffix
     #     imageFile.save(imagePath)
     #     db.edit_item(session["userID"], productID, name, desc, price, quantity, imagePath)
@@ -218,7 +214,7 @@ def edit_item():
 	if imageFile and imageFile.filename != '':
 		imagePath = "images/" + name + Path(imageFile.filename).suffix
 		imageFile.save(imagePath)
-	db.edit_item(session["userID"], productID, name, desc, price, quantity, imagePath)
+	db.edit_item(session["userID"], productID, name, desc, price, quantity, lowThreshhold, imagePath)
 	return redirect(url_for("inventory"))
 
 @app.route("/remove-tag", methods=["POST"])
